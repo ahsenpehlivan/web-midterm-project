@@ -23,7 +23,6 @@ function fmtKm(n) {
   return v.toLocaleString('tr-TR') + ' km';
 }
 
-// Masraf formülleri
 function calcTruckExpense(truck, distanceKm) {
   if (!truck || !distanceKm || distanceKm <= 0) return 0;
 
@@ -44,7 +43,6 @@ function calcShipExpense(ship, distanceKm) {
   return fuelPerKm * distanceKm + crew + maint;
 }
 
-// Destination stringinden ülke kodunu al (ör: "Berlin, DE")
 function getCountryCodeFromDestination(dest) {
   if (!dest) return '';
   const parts = String(dest).split(',');
@@ -52,7 +50,6 @@ function getCountryCodeFromDestination(dest) {
   return parts[1].trim().toUpperCase();
 }
 
-// TR → TR = domestic (truck), yoksa international (ship)
 function isDomesticShipment(shipment) {
   const dest = shipment?.destination || '';
   const countryCode = getCountryCodeFromDestination(dest);
@@ -76,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveBtn        = document.getElementById('saveFleetBtn');
     const fleetError     = document.getElementById('fleetError');
 
-    // Summary alanları
     const sumShipmentId  = document.getElementById('sumShipmentId');
     const sumStatus      = document.getElementById('sumStatus');
     const sumMode        = document.getElementById('sumMode');
@@ -92,20 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const truckExpenseEl = document.getElementById('truckExpense');
     const shipExpenseEl  = document.getElementById('shipExpense');
 
-    // ✅ Assignments tablosu body
     const assignmentsBody = document.getElementById('fleetAssignmentsBody');
 
-    // Veriler
     let fleetData     = loadData(STORAGE_KEYS.FLEET, { ships: [], trucks: [] });
     let shipmentsAll  = loadData(STORAGE_KEYS.SHIPMENTS, []);
     let currentShip   = null;
 
-    // UI yardımcıları
     function showError(msg) {
       fleetError.textContent = msg || '';
     }
 
-    // ✅ SADECE PENDING shipment’lar listeleniyor
     function fillShipmentOptions() {
       shipmentSelect.innerHTML =
         '<option value="">Select a shipment</option>';
@@ -132,17 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
       truckSelect.disabled = false;
       shipSelect.disabled = false;
 
-      pendingShipments.forEach((sh) => {
-        const opt = document.createElement('option');
-        opt.value = sh.shipment_id;
-        const status = sh.status || 'Pending';
-        opt.textContent =
-          `${sh.shipment_id} — ${sh.destination || ''} (${sh.weight_kg || 0} kg, ${sh.container_type || ''}, ${status})`;
-        shipmentSelect.appendChild(opt);
-      });
+      pendingShipments
+        .filter(sh => (sh.status || 'Pending') === 'Pending')
+        .forEach((sh) => {
+          const opt = document.createElement('option');
+          opt.value = sh.shipment_id;
+          const status = sh.status || 'Pending';
+          opt.textContent =
+            `${sh.shipment_id} — ${sh.destination || ''} (${sh.weight_kg || 0} kg, ${sh.container_type || ''}, ${status})`;
+          shipmentSelect.appendChild(opt);
+        });
     }
 
-    // ✅ Sadece status'ü Idle olan araçlar seçilebiliyor
     function fillFleetOptions() {
       truckSelect.innerHTML = '<option value="">Select truck</option>';
       shipSelect.innerHTML  = '<option value="">Select ship</option>';
@@ -317,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
       showError('');
     }
 
-    // ✅ Assignments tablosunu dolduran fonksiyon
     function refreshAssignmentsTable() {
       if (!assignmentsBody) return;
 
@@ -326,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const trucks = fleetData.trucks || [];
       const ships  = fleetData.ships || [];
 
-      // Truck veya ship atanmış tüm shipmentler
       const assignedShipments = (shipmentsAll || []).filter(
         sh => sh.truck_id || sh.ship_id
       );
@@ -407,7 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Shipments'ı yeniden oku
       const allShipments = loadData(STORAGE_KEYS.SHIPMENTS, []);
       const idx = allShipments.findIndex(
         sh => String(sh.shipment_id) === String(currentShip.shipment_id)
@@ -420,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const prev     = allShipments[idx];
       const oldFleet = Number(prev.fleet_total_expense || 0);
 
-      // Fleet'i de yeniden oku (güncel status için)
       const fleetRaw = loadData(STORAGE_KEYS.FLEET, { ships: [], trucks: [] });
       let truckExp = 0;
       let shipExp  = 0;
@@ -442,16 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const truck = trucksArr[tIdx];
 
-        // ✅ Araç sadece Idle ise atanabilir
         if ((truck.status || 'Idle') !== 'Idle') {
-          showError('This truck is already in transport.');
+          showError('This vehicle is already in transport.');
           return;
         }
 
         truckExp = calcTruckExpense(truck, distanceKm);
         total    = truckExp;
 
-        // Shipment üzerinde güncelle
         prev.truck_id      = truckId;
         prev.truck_name    = truck?.name || '';
         prev.truck_expense = truckExp;
@@ -460,7 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
         prev.ship_name     = '';
         prev.ship_expense  = 0;
 
-        // Truck status -> In Transit
         truck.status = 'In Transit';
         trucksArr[tIdx] = truck;
         fleetRaw.trucks = trucksArr;
@@ -480,9 +466,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const ship = shipsArr[sIdx];
 
-        // ✅ Araç sadece Idle ise atanabilir
         if ((ship.status || 'Idle') !== 'Idle') {
-          showError('This ship is already in transport.');
+          showError('This vehicle is already in transport.');
           return;
         }
 
@@ -497,7 +482,6 @@ document.addEventListener('DOMContentLoaded', () => {
         prev.truck_name    = '';
         prev.truck_expense = 0;
 
-        // Ship status -> In Transit
         ship.status = 'In Transit';
         shipsArr[sIdx] = ship;
         fleetRaw.ships = shipsArr;
@@ -511,7 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
       saveData(STORAGE_KEYS.SHIPMENTS, allShipments);
       saveData(STORAGE_KEYS.FLEET, fleetRaw);
 
-      // Finansal gider güncelle
       const fin = loadData(STORAGE_KEYS.FINANCIALS, {
         revenue: 0,
         expenses: 0,
@@ -524,15 +507,13 @@ document.addEventListener('DOMContentLoaded', () => {
       saveData(STORAGE_KEYS.FINANCIALS, fin);
       recomputeFinancials();
 
-      // Local değişkenleri güncelle
       shipmentsAll = allShipments;
       fleetData    = fleetRaw;
       currentShip  = prev;
 
-      // UI’yi yenile: bu shipment artık Pending değil, listeden düşmeli
       fillShipmentOptions();
       fillFleetOptions();
-      refreshAssignmentsTable();   // ✅ tabloyu yenile
+      refreshAssignmentsTable();
 
       shipmentSelect.value = '';
       currentShip = null;
@@ -546,10 +527,9 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Fleet assigned and vehicle status updated successfully.');
     }
 
-    // Init
     fillShipmentOptions();
     fillFleetOptions();
-    refreshAssignmentsTable();  // ✅ sayfa açılışında da doldur
+    refreshAssignmentsTable();
     updateModeUI();
     updateSummary();
 

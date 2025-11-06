@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - Inventory Dashboard | Transport System</title>
 
-    <!-- Ortak CSS -->
     <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -25,7 +24,6 @@
                 <a href="inventory_dashboard.html" class="nav-link-admin active">Inventory<br>Dashboard</a>
             </nav>
 
-            <!-- ÜST SAĞ: HOME / LOGIN -->
             <nav class="nav-links">
                 <a href="home.html" class="nav-link">HOME</a>
                 <a href="login.html" class="nav-link">LOGIN</a>
@@ -33,11 +31,9 @@
         </div>
     </header>
 
-    <!-- MAIN: INVENTORY DASHBOARD -->
     <main class="admin-section">
         <div class="container">
 
-            <!-- ÜST BAŞLIK -->
             <header class="admin-header">
                 <h1 class="admin-title">Inventory Dashboard</h1>
                 <p class="admin-subtitle">
@@ -46,10 +42,7 @@
                 </p>
             </header>
 
-            <!-- ÜST KISIM: USE CASE + ÖZET KARTLAR -->
             <section class="opt-top-row">
-
-                <!-- SAĞ: Özet metrikler -->
                 <article class="opt-summary-card inv-summary-card">
                     <h3 class="opt-summary-title">Inventory Summary</h3>
                     <div class="opt-summary-grid">
@@ -67,15 +60,12 @@
                         </div>
                     </div>
 
-                    <!-- Low stock mesajı -->
                     <p id="invAlerts" class="inv-alert">
                         Loading inventory data...
                     </p>
                 </article>
             </section>
 
-            <!-- ALT KISIM: INVENTORY LEVELS + STOCK EKLEME FORMU -->
-            <!-- Dikkat: opt-grid-single eklendi, böylece panel tek sütun ve geniş -->
             <section class="opt-grid opt-grid-single">
                 <div class="admin-panel">
                     <h2 class="admin-panel-title">Inventory Levels</h2>
@@ -100,7 +90,6 @@
                         </table>
                     </div>
 
-                    <!-- STOCK EKLEME ALANI -->
                     <div class="inv-actions">
                         <div class="inv-actions-header">
                             <h3 class="inv-actions-title">Restock Inventory</h3>
@@ -109,7 +98,6 @@
                             <label>
                                 Category
                                 <select id="invCategorySelect">
-                                    <!-- JS ile doldurulacak -->
                                 </select>
                             </label>
 
@@ -137,7 +125,6 @@
         </div>
     </main>
 
-    <!-- JS: admin tarafı (aynı dosya) -->
     <script type="module" src="./js/admin.js"></script>
 </body>
 </html>

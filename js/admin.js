@@ -6,10 +6,8 @@ import {
   recomputeFinancials
 } from './utils.js';
 
-// Seed veriyi yükle (routes, rates, fleet, inventory, financials, vb.)
 await bootstrapSeedIfNeeded();
 
-// DOM elementleri
 const pendingBody      = document.getElementById('pendingShipmentsBody');
 const containersBody   = document.getElementById('containersBody');
 const btnOptimize      = document.getElementById('btnOptimize');
@@ -18,10 +16,6 @@ const statPendingEl    = document.getElementById('statPendingShipments');
 const statContainersEl = document.getElementById('statContainers');
 const statWeightEl     = document.getElementById('statTotalWeight');
 const statCostEl       = document.getElementById('statTotalCost');
-
-// ===================
-// Helper formatters
-// ===================
 
 function fmtNumber(n) {
   const v = Number(n) || 0;
@@ -37,7 +31,6 @@ function fmtPrice(n) {
   return v.toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + ' ₺';
 }
 
-// Basit container ID üretici
 function generateContainerId() {
   const now = new Date();
   const y = now.getFullYear().toString().slice(-2);
@@ -46,10 +39,6 @@ function generateContainerId() {
   const rand = Math.random().toString(36).substr(2, 3).toUpperCase();
   return `CT-${y}${m}${d}-${rand}`;
 }
-
-// ===================
-// Data helpers
-// ===================
 
 function getAllShipments() {
   return loadData(STORAGE_KEYS.SHIPMENTS, []) || [];
@@ -71,17 +60,13 @@ function getRateInfoForType(containerType) {
   ) || null;
 }
 
-function getAnyShip() {
-  const fleet = loadData(STORAGE_KEYS.FLEET, { ships: [], trucks: [] });
-  if (fleet && Array.isArray(fleet.ships) && fleet.ships.length > 0) {
-    return fleet.ships[0]; // şimdilik hep ilk gemi
-  }
-  return null;
-}
-
 // Cost = fuel_per_km * distance + crew_cost + maintenance
 function computeContainerCost(container) {
-  const ship = getAnyShip();
+  const fleet = loadData(STORAGE_KEYS.FLEET, { ships: [], trucks: [] });
+  const ship = (fleet && Array.isArray(fleet.ships) && fleet.ships.length > 0) 
+    ? fleet.ships[0] 
+    : null;
+  
   if (!ship) return 0;
 
   const distance = Number(container.distance_km || 0);
@@ -93,10 +78,6 @@ function computeContainerCost(container) {
   const total = fuelCost + crew + maint;
   return Math.max(0, Math.round(total));
 }
-
-// ===================
-// Rendering
-// ===================
 
 function renderPendingTable(pendingShipments) {
   if (!pendingBody) return;
@@ -165,12 +146,6 @@ function renderSummary(pendingShipments, containers) {
   if (statCostEl)       statCostEl.textContent       = fmtPrice(totalCost);
 }
 
-// ===================
-// First-Fit Decreasing
-// ===================
-// Aynı (destination, container_type) grubundaki PENDING shipment’ları
-// FFD ile konteynerlere yerleştiriyoruz.
-
 function optimizeContainersForPending() {
   const shipments = getAllShipments();
   const pending = shipments.filter(
@@ -185,7 +160,6 @@ function optimizeContainersForPending() {
     };
   }
 
-  // Gruplama: destination + container_type
   const groups = new Map();
   for (const s of pending) {
     const key = `${s.destination}__${s.container_type}`;
@@ -202,30 +176,38 @@ function optimizeContainersForPending() {
 
     const containerType = groupShipments[0].container_type;
     const rateInfo = getRateInfoForType(containerType);
-    const capacity = rateInfo?.capacity_kg ?? 0;
+    const capacity = Number.isFinite(rateInfo?.capacity_kg) ? Number(rateInfo.capacity_kg) : 0;
 
     if (!capacity || capacity <= 0) {
-      console.warn('No capacity info for container type', containerType);
       continue;
     }
 
-    // FFD: ağırlığa göre azalan sırala
-    const sorted = [...groupShipments].sort(
-      (a, b) => (Number(b.weight_kg) || 0) - (Number(a.weight_kg) || 0)
-    );
+    const sorted = [...groupShipments]
+      .filter(s => {
+        const w = Number(s.weight_kg);
+        return Number.isFinite(w) && w > 0;
+      })
+      .sort(
+        (a, b) => (Number(b.weight_kg) || 0) - (Number(a.weight_kg) || 0)
+      );
+
+    if (!sorted.length) continue;
 
     const containersForGroup = [];
     const any = groupShipments[0];
-    const distanceKm = Number(any.distance_km || 0);
+    const distanceKm = Number.isFinite(any.distance_km) ? Number(any.distance_km) : 0;
 
     for (const shipment of sorted) {
-      const weight = Number(shipment.weight_kg || 0);
+      const weight = Number(shipment.weight_kg);
+      if (!Number.isFinite(weight) || weight <= 0 || weight > capacity) {
+        continue;
+      }
 
-      // Yeterli boş alanı olan ilk konteynere koy
       let placed = false;
       for (const cont of containersForGroup) {
-        if ((cont.used_kg + weight) <= cont.capacity_kg) {
-          cont.used_kg += weight;
+        const newUsed = cont.used_kg + weight;
+        if (newUsed <= cont.capacity_kg) {
+          cont.used_kg = newUsed;
           cont.remaining_kg = cont.capacity_kg - cont.used_kg;
           cont.shipment_ids.push(shipment.shipment_id);
           placed = true;
@@ -233,7 +215,6 @@ function optimizeContainersForPending() {
         }
       }
 
-      // Sığmadıysa yeni konteyner aç
       if (!placed) {
         const newContainer = {
           container_id: generateContainerId(),
@@ -252,7 +233,6 @@ function optimizeContainersForPending() {
       }
     }
 
-    // Her konteyner için taşıma maliyetini hesapla
     for (const cont of containersForGroup) {
       cont.transport_cost = computeContainerCost(cont);
     }
@@ -260,7 +240,6 @@ function optimizeContainersForPending() {
     createdContainers.push(...containersForGroup);
   }
 
-  // Bu konteynere yerleştirilen shipment’ların statüsünü güncelle
   const usedShipmentIds = new Set(
     createdContainers.flatMap(c => c.shipment_ids)
   );
@@ -278,14 +257,9 @@ function optimizeContainersForPending() {
   };
 }
 
-// ===================
-// Event handler
-// ===================
-
 function handleClickOptimize() {
   const { updatedShipments, newContainers } = optimizeContainersForPending();
 
-  // Hiç yeni konteyner oluşmadıysa (pending yoktu)
   if (!newContainers.length) {
     const allShipments = getAllShipments();
     const containers = getAllContainers();
@@ -298,15 +272,12 @@ function handleClickOptimize() {
     return;
   }
 
-  // Shipment’ları kaydet
   saveData(STORAGE_KEYS.SHIPMENTS, updatedShipments);
 
-  // Yeni konteynerleri mevcutların üstüne ekle
   const existingContainers = getAllContainers();
   const allContainers = [...existingContainers, ...newContainers];
   saveData(STORAGE_KEYS.CONTAINERS, allContainers);
 
-  // Financials: expenses = tüm konteyner cost toplamı
   const totalExpenses = allContainers.reduce(
     (sum, c) => sum + (Number(c.transport_cost) || 0),
     0
@@ -320,7 +291,6 @@ function handleClickOptimize() {
   saveData(STORAGE_KEYS.FINANCIALS, fin);
   recomputeFinancials();
 
-  // UI’yi güncelle
   const pendingNow = updatedShipments.filter(
     s => String(s.status || '').toLowerCase() === 'pending'
   );
@@ -330,23 +300,17 @@ function handleClickOptimize() {
 
 }
 
-// ===================
-// RESET OPTIMIZATION
-// ===================
 function handleClickReset() {
   if (!confirm('Are you sure you want to reset all container optimizations?')) return;
 
-  // 1️⃣ Shipments → tekrar Pending yap
   const shipments = getAllShipments().map(s => ({
     ...s,
     status: 'Pending'
   }));
   saveData(STORAGE_KEYS.SHIPMENTS, shipments);
 
-  // 2️⃣ Containers → sil
   saveData(STORAGE_KEYS.CONTAINERS, []);
 
-  // 3️⃣ Financials → expenses = 0
   const fin = loadData(STORAGE_KEYS.FINANCIALS, {
     revenue: 0,
     expenses: 0,
@@ -356,18 +320,12 @@ function handleClickReset() {
   saveData(STORAGE_KEYS.FINANCIALS, fin);
   recomputeFinancials();
 
-  // 4️⃣ UI’yi sıfırla
   renderPendingTable(shipments);
   renderContainersTable([]);
   renderSummary(shipments, []);
 
   alert('Optimization data has been reset.');
 }
-
-
-// ===================
-// Init
-// ===================
 
 function initAdmin() {
   const shipments = getAllShipments();
@@ -376,7 +334,6 @@ function initAdmin() {
     s => String(s.status || '').toLowerCase() === 'pending'
   );
 
-  // Sadece admin.html'de ilgili elemanlar var, diğer sayfalarda çalışmaz
   renderPendingTable(pending);
   renderContainersTable(containers);
   renderSummary(pending, containers);
@@ -394,24 +351,18 @@ function initAdmin() {
     btnSystemReset.addEventListener('click', () => {
       resetAllData();
     });
-}
+  }
 }
 
-// ===================
-// INVENTORY DASHBOARD (Step 6)
-// ===================
-
-// Stok durumunu hesapla (qty <= min_stock ise Low)
 function computeInventoryStatus(item) {
-  const qty = Number(item.quantity_kg || 0);
-  const min = Number(item.min_stock || 0);
+  const qty = Number.isFinite(item.quantity_kg) ? Number(item.quantity_kg) : 0;
+  const min = Number.isFinite(item.min_stock) ? Number(item.min_stock) : 0;
   return qty <= min ? 'Low' : 'OK';
 }
 
-// Tabloyu doldur
 function renderInventoryTable(items) {
   const body = document.getElementById('inventoryTableBody');
-  if (!body) return; // bu sayfada değiliz
+  if (!body) return;
 
   if (!items || !items.length) {
     body.innerHTML = `
@@ -440,23 +391,22 @@ function renderInventoryTable(items) {
   }).join('');
 }
 
-// Özet metrikleri ve uyarı mesajını doldur
 function renderInventorySummary(items) {
   const totalEl = document.getElementById('invTotalKg');
   const okEl    = document.getElementById('invOkCount');
   const lowEl   = document.getElementById('invLowCount');
   const alertEl = document.getElementById('invAlerts');
 
-  if (!totalEl && !okEl && !lowEl && !alertEl) return; // bu sayfada değiliz
+  if (!totalEl && !okEl && !lowEl && !alertEl) return;
 
   let totalKg = 0;
   let okCount = 0;
   let lowCount = 0;
 
   items.forEach((item) => {
-    const qty = Number(item.quantity_kg || 0);
+    const qty = Number.isFinite(item.quantity_kg) ? Number(item.quantity_kg) : 0;
     const status = computeInventoryStatus(item);
-    totalKg += qty;
+    totalKg += Math.max(0, qty);
     if (status === 'Low') lowCount++;
     else okCount++;
   });
@@ -481,7 +431,6 @@ function renderInventorySummary(items) {
   }
 }
 
-// Category dropdown'ını doldur
 function fillInventoryCategorySelect(items) {
   const select = document.getElementById('invCategorySelect');
   if (!select) return;
@@ -498,16 +447,13 @@ function fillInventoryCategorySelect(items) {
   `).join('');
 }
 
-// Inventory Dashboard initializer
 function initInventoryDashboard() {
-  // Bu ID'ler yoksa, şu an inventory sayfasında değiliz
   const tableBody = document.getElementById('inventoryTableBody');
   const summaryEl = document.getElementById('invTotalKg');
   if (!tableBody && !summaryEl) return;
 
   let inventory = loadData(STORAGE_KEYS.INVENTORY, []) || [];
 
-  // Status alanını hesaplayalım
   let updated = inventory.map((item) => ({
     ...item,
     status: computeInventoryStatus(item),
@@ -518,7 +464,6 @@ function initInventoryDashboard() {
   renderInventorySummary(updated);
   fillInventoryCategorySelect(updated);
 
-  // Stock ekleme butonu
   const btnAdd   = document.getElementById('btnInvAdd');
   const select   = document.getElementById('invCategorySelect');
   const amountEl = document.getElementById('invAddAmount');
@@ -532,17 +477,17 @@ function initInventoryDashboard() {
         alert('Please select a category.');
         return;
       }
-      if (!delta || delta <= 0) {
+      if (!Number.isFinite(delta) || delta <= 0) {
         alert('Please enter a positive amount in kg.');
         return;
       }
 
-      // Güncel inventory'yi çek, seçilen kategoriye miktar ekle
       let inv = loadData(STORAGE_KEYS.INVENTORY, []) || [];
       inv = inv.map((item) => {
         if (item.category === category) {
           const current = Number(item.quantity_kg || 0);
-          return { ...item, quantity_kg: current + delta };
+          const newQty = Math.max(0, current + delta);
+          return { ...item, quantity_kg: newQty };
         }
         return item;
       });
@@ -564,14 +509,9 @@ function initInventoryDashboard() {
   }
 }
 
-// ===================
-// FINANCIAL DASHBOARD (Step 4)
-// ===================
-
-// Özet (toplamlar) panelini doldur
 function renderFinancialSummary(fin) {
   const revEl  = document.getElementById('finRevenue');
-  if (!revEl) return; // financial dashboard sayfasında değiliz
+  if (!revEl) return;
 
   const expEl  = document.getElementById('finExpenses');
   const netEl  = document.getElementById('finNetIncome');
@@ -594,7 +534,6 @@ function renderFinancialSummary(fin) {
   if (rateEl) rateEl.textContent =
     rate.toLocaleString('tr-TR', { maximumFractionDigits: 0 }) + ' %';
 
-  // Pozitif / negatif renklendirme
   if (netEl) {
     netEl.classList.toggle('fin-negative', net < 0);
     netEl.classList.toggle('fin-positive', net > 0);
@@ -612,7 +551,6 @@ function renderFinancialSummary(fin) {
   }
 }
 
-// Revenue tablosunu doldur (Shipments)
 function renderFinancialRevenueTable(shipments) {
   const body = document.getElementById('finRevenueBody');
   if (!body) return;
@@ -640,7 +578,6 @@ function renderFinancialRevenueTable(shipments) {
   `).join('');
 }
 
-// Expenses tablosunu doldur (Containers)
 function renderFinancialExpensesTable(containers) {
   const body = document.getElementById('finExpensesBody');
   if (!body) return;
@@ -667,13 +604,10 @@ function renderFinancialExpensesTable(containers) {
   `).join('');
 }
 
-// Financial Dashboard initializer
 function initFinancialDashboard() {
-  // Bu ID yoksa bu sayfada değiliz
   const root = document.getElementById('finDashboardRoot');
   if (!root) return;
 
-  // Finans değerlerini en güncel haliyle hesapla
   const fin = recomputeFinancials();
 
   const shipments  = loadData(STORAGE_KEYS.SHIPMENTS, [])   || [];
@@ -683,45 +617,31 @@ function initFinancialDashboard() {
   renderFinancialRevenueTable(shipments);
   renderFinancialExpensesTable(containers);
 
-  // Download button event listener
   const btnDownloadReport = document.getElementById('btnDownloadReport');
   if (btnDownloadReport) {
     btnDownloadReport.addEventListener('click', exportFinancialReport);
   }
 }
 
-// Export Financial Report function
 function exportFinancialReport() {
   window.print();
 }
 
-// ==========================
-// SYSTEM RESET FUNCTION
-// ==========================
 async function resetAllData() {
   if (!confirm("⚠️ All system data will be reset to initial JSON seed. Continue?")) {
     return;
   }
 
-  // Tüm app verilerini temizle (özellikle META önemli)
   Object.values(STORAGE_KEYS).forEach((key) => {
     localStorage.removeItem(key);
   });
 
-  // META yokken bootstrapSeedIfNeeded tekrar çalışacak ve:
-  // app_meta.json, routes.json, container_rates.json,
-  // fleet.json, inventory.json, financial_schema.json
-  // hepsini BAŞTAN yüklüyor.
   await bootstrapSeedIfNeeded();
 
   alert("✅ System data has been reset to initial seed JSON.");
   location.reload();
 }
 
-
-
-
-// Hem admin, hem inventory init
 initAdmin();
 initInventoryDashboard();
 initFinancialDashboard();

@@ -9,8 +9,6 @@ import {
   normalizeText
 } from './utils.js';
 
-
-// AUTOCOMPLETE: Destination (City, Country)
 function initDestinationCombo() {
   const input = document.getElementById('destination');
   const sugg  = document.getElementById('destSuggestions');
@@ -133,7 +131,6 @@ function initDestinationCombo() {
 }
 
 
-// Fotoğraf upload / önizleme
 function initFileUpload() {
   const input   = document.getElementById('shipmentPhoto');
   const nameEl  = document.getElementById('fileName');
@@ -163,7 +160,7 @@ function initFileUpload() {
       return;
     }
     if (!isOkSize) {
-      alert('Görsel 3 MB’tan küçük olmalı.');
+      alert('Image must be smaller than 3 MB.');
       input.value = '';
       return;
     }
@@ -178,12 +175,10 @@ function initFileUpload() {
 }
 
 
-// Container tiplerini radio butonlara uygula (Small / Medium / Large)
 function initContainerTypes() {
   const rates = loadData(STORAGE_KEYS.RATES, []);
   if (!rates || !rates.length) return;
 
-  // label.option-pill içindeki span’leri capacity ile zenginleştirelim
   const pills = document.querySelectorAll('.option-pill');
   pills.forEach(pill => {
     const input = pill.querySelector('input[type="radio"]');
@@ -203,7 +198,6 @@ function initContainerTypes() {
 }
 
 
-// Kategori seçeneklerini doldurur (inventory.json -> localStorage:INVENTORY)
 function initProductCategories() {
   const categorySelect = document.getElementById('productCategory');
   if (!categorySelect) return;
@@ -225,7 +219,6 @@ function initProductCategories() {
 }
 
 
-// Fotoğrafı DataURL yapar
 function readPhotoAsDataURL(file) {
   return new Promise((resolve) => {
     if (!file) return resolve(null);
@@ -235,25 +228,22 @@ function readPhotoAsDataURL(file) {
   });
 }
 
-// Basit ETA (gün cinsinden)
 function estimateEtaDays(distanceKm) {
   if (!distanceKm || distanceKm <= 0) return 1;
   return Math.max(1, Math.ceil(distanceKm / 800));
 }
 
-// Benzersiz bir Shipment ID üret (ör: TW-250305-AB3F)
 function generateShipmentId() {
   const now = new Date();
-  const y = now.getFullYear().toString().slice(-2); // son 2 rakam
+  const y = now.getFullYear().toString().slice(-2);
   const m = String(now.getMonth() + 1).padStart(2, '0');
   const d = String(now.getDate()).padStart(2, '0');
-  const rand = Math.random().toString(36).substr(2, 4).toUpperCase(); // 4 karakterlik random
+  const rand = Math.random().toString(36).substr(2, 4).toUpperCase();
 
   return `TW-${y}${m}${d}-${rand}`;
 }
 
 
-// Seçili container tipini (radio) döner: Small / Medium / Large
 function getSelectedContainerType() {
   const checked = document.querySelector('input[name="containerSize"]:checked');
   if (!checked) return '';
@@ -283,7 +273,6 @@ async function handleSubmitShipment() {
   shipments.push(newShipment);
   saveData(STORAGE_KEYS.SHIPMENTS, shipments);
 
-  // Inventory & finans güncellemeleri (aynı kalıyor)
   const inventory = loadData(STORAGE_KEYS.INVENTORY, []);
   const invIndex = inventory.findIndex(
     (item) => `${item.category} Blueberries` === draft.product_category
@@ -306,7 +295,6 @@ async function handleSubmitShipment() {
   saveData(STORAGE_KEYS.FINANCIALS, fin);
   recomputeFinancials();
 
-  // ✅ Shipment ID kartını göster
   const card = document.getElementById('shipmentCreatedCard');
   const idText = document.getElementById('createdShipmentId');
   const copyBtn = document.getElementById('copyShipmentIdBtn');
@@ -315,7 +303,6 @@ async function handleSubmitShipment() {
     idText.textContent = shipmentId;
     card.hidden = false;
 
-    // Kopyalama butonu
     copyBtn.onclick = () => {
       navigator.clipboard.writeText(shipmentId)
         .then(() => {
@@ -325,11 +312,9 @@ async function handleSubmitShipment() {
     };
   }
 
-  // Summary’de de ID’yi göster
   const summaryShipmentIdEl = document.getElementById('summaryShipmentId');
   if (summaryShipmentIdEl) summaryShipmentIdEl.textContent = shipmentId;
 
-  // Formu sıfırlama (ID kartı dursun, sadece form temizlensin)
   const form = document.querySelector('.shipment-form');
   if (form) form.reset();
   const originInput = document.getElementById('origin');
@@ -338,7 +323,6 @@ async function handleSubmitShipment() {
   if (smallRadio) smallRadio.checked = true;
 }
 
-// Fiyatı ve özet bilgileri hesaplar + summary paneline yazar
 async function handleCreateShipment() {
   const destinationInput = document.getElementById('destination');
   const productNameInput = document.getElementById('productName');
@@ -353,26 +337,39 @@ async function handleCreateShipment() {
   const summaryPriceEl   = document.getElementById('summaryPrice');
 
   if (!destinationInput || !categorySelect || !weightInput) {
-    alert('Form elemanları bulunamadı.');
+    alert('Required form elements are missing.');
     return;
   }
 
   const destination     = destinationInput.value.trim();
   const productName     = productNameInput?.value.trim() || '';
   const productCategory = categorySelect.value;
-  const containerType   = getSelectedContainerType(); // Small / Medium / Large
+  const containerType   = getSelectedContainerType();
   const weight          = Number(weightInput.value || 0);
   const details         = detailsInput?.value.trim() || '';
   const photoFile       = photoInput?.files?.[0] || null;
 
-  if (!destination || !containerType || !productCategory || !weight) {
-    alert('Lütfen gerekli alanları doldurun.');
+  if (!Number.isFinite(weight) || weight < 1) {
+    alert('Please enter a valid weight of at least 1 kg.');
+    if (capacityAlertEl) capacityAlertEl.textContent = '';
+    if (summaryDistanceEl) summaryDistanceEl.textContent = '—';
+    if (summaryEtaEl) summaryEtaEl.textContent = '—';
+    if (summaryPriceEl) summaryPriceEl.textContent = '—';
+    return;
+  }
+
+  if (!destination || !containerType || !productCategory) {
+    alert('Please fill in all required fields.');
     return;
   }
 
   const distanceKm = findDistanceKmFromRoutes(destination);
-  if (distanceKm < 0) {
-    alert('Seçilen destinasyon için rota bulunamadı. Lütfen öneri listesinden bir şehir seçin.');
+  if (!Number.isFinite(distanceKm) || distanceKm < 0) {
+    alert('Route not found for selected destination. Please select a city from the suggestions list.');
+    if (capacityAlertEl) capacityAlertEl.textContent = '';
+    if (summaryDistanceEl) summaryDistanceEl.textContent = '—';
+    if (summaryEtaEl) summaryEtaEl.textContent = '—';
+    if (summaryPriceEl) summaryPriceEl.textContent = '—';
     return;
   }
 
@@ -381,21 +378,25 @@ async function handleCreateShipment() {
   const etaDays      = estimateEtaDays(distanceKm);
   const photoDataURL = await readPhotoAsDataURL(photoFile);
 
-  // Container kapasitesini bul ve kullanıcıyı uyar
   const rates = loadData(STORAGE_KEYS.RATES, []);
   const rateInfo = rates.find(
     r => String(r.type || '').toLowerCase() === containerType.toLowerCase()
   );
+  
   if (rateInfo && capacityAlertEl) {
-    if (weight > rateInfo.capacity_kg) {
+    const capacity = Number(rateInfo.capacity_kg || 0);
+    if (weight > capacity) {
       capacityAlertEl.textContent =
-        `There is not enough space in ${containerType} container (max ${rateInfo.capacity_kg} kg).`;
+        'There is not enough space in the selected container for this weight.';
+      if (summaryDistanceEl) summaryDistanceEl.textContent = '—';
+      if (summaryEtaEl) summaryEtaEl.textContent = '—';
+      if (summaryPriceEl) summaryPriceEl.textContent = '—';
+      return;
     } else {
       capacityAlertEl.textContent = '';
     }
   }
 
-  // Draft objesi (Submit sırasında tekrar kullanılacak)
   const draft = {
     destination,
     product_name: productName,
@@ -411,10 +412,8 @@ async function handleCreateShipment() {
     created_at: new Date().toISOString()
   };
 
-  // Geçici olarak sessionStorage'a kaydet (Submit'te buradan okuyacağız)
   sessionStorage.setItem('PENDING_SHIPMENT', JSON.stringify(draft));
 
-  // Summary paneline yaz (Distance, ETA, Price)
   if (summaryDistanceEl) {
     summaryDistanceEl.textContent =
       `${distanceKm.toLocaleString('tr-TR')} km`;
@@ -434,16 +433,13 @@ async function handleCreateShipment() {
 
 document.addEventListener('DOMContentLoaded', () => {
   (async () => {
-    // Seed veriyi bir kere yükle
     await bootstrapSeedIfNeeded();
 
-    // Arayüz initializer'ları
     initDestinationCombo();
     initProductCategories();
     initContainerTypes();
     initFileUpload();
 
-    // Calculate Price butonuna bağlan
     const calcBtn = document.getElementById('calculatePriceBtn');
     if (calcBtn) {
       calcBtn.addEventListener('click', (e) => {
@@ -452,12 +448,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // ✅ Submit butonunu yakala (form submit olayı)
     const form = document.querySelector('.shipment-form');
     if (form) {
       form.addEventListener('submit', (e) => {
-        e.preventDefault();      // sayfa yenilenmesin
-        handleSubmitShipment();  // yukarıda yazdığımız fonksiyon
+        e.preventDefault();
+        handleSubmitShipment();
       });
     }
   })();

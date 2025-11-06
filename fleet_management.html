@@ -33,14 +33,12 @@
     <main class="shipment-section">
         <div class="container">
             <div class="shipment-card fleet-card">
-                <!-- SOL TARAF -->
                 <div class="shipment-main">
                     <h1 class="shipment-title">Fleet Management</h1>
                     <p class="shipment-desc">
                         Assign trucks or ships to shipments and track trip expenses.
                     </p>
 
-                    <!-- SHIPMENT SEÇİMİ -->
                     <div class="form-group">
                         <label for="fleetShipment">Select Shipment</label>
                         <select id="fleetShipment" name="fleetShipment">
@@ -49,12 +47,9 @@
                     </div>
                     <p id="noShipmentsMsg" class="capacity-alert" aria-live="polite"></p>
 
-                    <!-- MOD BİLGİSİ (DOMESTIC / INTERNATIONAL) -->
                     <p id="fleetModeBadge" class="fleet-formula-hint"></p>
 
-                    <!-- ARAÇ BLOKLARI -->
                     <section class="fleet-vehicles">
-                        <!-- TRUCK BLOĞU (SADECE YURTİÇİ İÇİN GÖRÜNECEK) -->
                         <div class="fleet-vehicle" id="truckBlock">
                             <h2 class="fleet-subtitle">Truck Assignment</h2>
 
@@ -71,7 +66,6 @@
                             </div>
                         </div>
 
-                        <!-- SHIP BLOĞU (SADECE YURTDIŞI İÇİN GÖRÜNECEK) -->
                         <div class="fleet-vehicle" id="shipBlock">
                             <h2 class="fleet-subtitle">Ship Assignment</h2>
 
@@ -89,7 +83,6 @@
                         </div>
                     </section>
 
-                    <!-- BUTONLAR -->
                     <div class="shipment-actions">
                         <button type="button" id="calcFleetBtn" class="btn-primary">
                             Calculate Expense
@@ -107,7 +100,6 @@
                     </p>
                 </div>
 
-                <!-- SAĞ TARAF: ÖZET -->
                 <aside class="shipment-summary fleet-summary">
                     <h2 class="summary-title">Selected Shipment</h2>
 
@@ -180,7 +172,6 @@
                             </tr>
                         </thead>
                         <tbody id="fleetAssignmentsBody">
-                            <!-- JS ile doldurulacak -->
                         </tbody>
                     </table>
                 </div>

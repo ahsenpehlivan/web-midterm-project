@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Shipment | Transport System</title>
 
-    <!-- Ortak CSS -->
     <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -13,7 +12,6 @@
     <header class="navbar">
         <div class="container nav-container">
             <div class="logo">
-                <!-- Kendi logon -->
                 <img src="assets/logo.png" alt="Logo" class="logo-img" />
                 <span class="logo-text">TRANSPORT</span>
             </div>
@@ -25,11 +23,9 @@
         </div>
     </header>
 
-    <!-- CREATE SHIPMENT -->
     <main class="shipment-section">
         <div class="container">
             <div class="shipment-card">
-                <!-- SOL: FORM -->
                 <div class="shipment-main">
                     <h1 class="shipment-title">Create Shipment</h1>
                     <p class="shipment-desc">
@@ -61,7 +57,6 @@
                                 required
                             />
 
-                            <!-- Öneriler için (JS ile dolduracaksın) -->
                             <div
                                 id="destSuggestions"
                                 class="combo-suggestions"
@@ -108,6 +103,7 @@
                                 id="weight"
                                 name="weight"
                                 min="1"
+                                step="1"
                                 value="500"
                                 placeholder="e.g. 500"
                                 required
@@ -240,7 +236,6 @@
             </div>
             </section>
 
-            <!-- ✅ Shipment Created Info -->
             <div id="shipmentCreatedCard" class="shipment-created" hidden>
             <h3>Shipment Created Successfully 🎉</h3>
             <p>Your Shipment ID:</p>

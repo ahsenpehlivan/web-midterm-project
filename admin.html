@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - Container Optimization | Transport System</title>
 
-    <!-- Ortak CSS -->
     <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -34,7 +33,6 @@
     <!-- MAIN: CONTAINER OPTIMIZATION -->
     <main class="admin-section">
         <div class="container">
-            <!-- ÜST BAŞLIK -->
             <header class="admin-header">
                 <h1 class="admin-title">Container Optimization</h1>
                 <p class="admin-subtitle">
@@ -43,7 +41,6 @@
                 </p>
             </header>
 
-            <!-- ÜST INFO & BUTON -->
             <section class="opt-top-row">
                 <div class="opt-summary-card">
                     <h3 class="opt-summary-title">Current Summary</h3>
@@ -81,9 +78,7 @@
                 </div>
             </section>
 
-            <!-- ALT GRID: SOL PENDING SHIPMENTS, SAĞ SONUÇLAR -->
             <section class="opt-grid">
-                <!-- SOL: Pending Shipments -->
                 <div class="admin-panel">
                     <h2 class="admin-panel-title">Pending Shipments</h2>
                     <div class="admin-table-wrapper">
@@ -108,7 +103,6 @@
                     </div>
                 </div>
 
-                <!-- SAĞ: Optimization Result (Containers) -->
                 <div class="admin-panel">
                     <h2 class="admin-panel-title">Optimized Containers</h2>
                     <div class="admin-table-wrapper">
@@ -142,7 +136,6 @@
             Reset all data (shipments, containers, inventory, and financials) to their initial default values.
         </p>
 
-        <!-- onclick KALDIRILDI, id eklendi -->
         <button id="btnSystemReset" class="btn-reset">🔄 Reset System Data</button>
 
         <p class="inv-alert" style="margin-top: 0.75rem;">
@@ -153,7 +146,6 @@
 
     </main>
 
-    <!-- JS: admin tarafı -->
     <script type="module" src="./js/admin.js"></script>
 </body>
 </html>

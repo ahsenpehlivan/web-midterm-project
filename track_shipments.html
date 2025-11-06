@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Track Shipment | Transport System</title>
 
-    <!-- Ortak CSS -->
     <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -24,18 +23,15 @@
         </div>
     </header>
 
-    <!-- TRACK SHIPMENT SECTION (Create Shipment ile aynı tarz) -->
     <main class="shipment-section">
         <div class="container">
             <div class="shipment-card">
-                <!-- SOL TARAF: FORM + DETAYLAR -->
                 <div class="shipment-main">
                     <h1 class="shipment-title">Track Shipment</h1>
                     <p class="shipment-desc">
                         Enter your Shipment ID to see the current status and details.
                     </p>
 
-                    <!-- ID SORGULAMA FORMU -->
                     <form id="trackForm" class="shipment-form">
                         <div class="form-group">
                             <label for="trackId">Shipment ID</label>
@@ -57,7 +53,6 @@
                             </a>
                         </div>
 
-                        <!-- HATA MESAJI (kırmızı yazı için capacity-alert sınıfını kullandım) -->
                         <p
                             id="trackError"
                             class="capacity-alert"
@@ -65,7 +60,6 @@
                         ></p>
                     </form>
 
-                    <!-- SONUÇ KARTI (Shipment Created kartı stilini yeniden kullanıyoruz) -->
                 <div id="trackResult" class="shipment-created" hidden>
                     <h3>Shipment Details</h3>
 
@@ -109,7 +103,6 @@
 
                 </div>
 
-                <!-- SAĞ TARAF: ÖZET PANEL (Create Shipment summary ile aynı stil) -->
                 <aside class="shipment-summary">
                     <h2 class="summary-title">Overview</h2>
 

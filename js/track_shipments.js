@@ -2,7 +2,6 @@
 
 import { STORAGE_KEYS, loadData, bootstrapSeedIfNeeded } from './utils.js';
 
-// Seed veriyi yükle (daha önce yüklendiyse bir şey yapmaz)
 await bootstrapSeedIfNeeded();
 
 const form      = document.getElementById('trackForm');
@@ -31,33 +30,39 @@ function showError(msg) {
 }
 
 function fillUI(sh) {
-    const eta = sh.eta_days ?? estimateEtaDays(sh.distance_km);
+    const weightKg = Number(sh.weight_kg);
+    const distanceKm = Number(sh.distance_km);
+    const price = Number(sh.price);
+    const eta = Number.isFinite(sh.eta_days) ? Number(sh.eta_days) : estimateEtaDays(distanceKm);
+    const validEta = Number.isFinite(eta) && eta > 0 ? eta : 1;
 
-    // Detay kartı
     document.getElementById('resId').textContent        = sh.shipment_id || '—';
     document.getElementById('resDest').textContent      = sh.destination || '—';
     document.getElementById('resProduct').textContent   = sh.product_name || '—';
     document.getElementById('resContainer').textContent = sh.container_type || '—';
-    document.getElementById('resWeight').textContent    = (sh.weight_kg ?? '—') + ' kg';
-    document.getElementById('resDistance').textContent  = fmtDistance(sh.distance_km);
+    document.getElementById('resWeight').textContent    = 
+        Number.isFinite(weightKg) && weightKg > 0 ? `${weightKg.toLocaleString('tr-TR')} kg` : '—';
+    document.getElementById('resDistance').textContent  = 
+        Number.isFinite(distanceKm) && distanceKm > 0 ? fmtDistance(distanceKm) : '—';
     document.getElementById('resEta').textContent       =
-        eta + (eta > 1 ? ' days' : ' day');
-    document.getElementById('resPrice').textContent     = fmtPrice(sh.price);
+        Number.isFinite(validEta) ? `${validEta} ${validEta > 1 ? 'days' : 'day'}` : '—';
+    document.getElementById('resPrice').textContent     = 
+        Number.isFinite(price) && price >= 0 ? fmtPrice(price) : '—';
 
     const created = sh.created_at ? new Date(sh.created_at) : null;
     document.getElementById('resCreated').textContent =
-        created ? created.toLocaleString('tr-TR') : '—';
+        created && !isNaN(created.getTime()) ? created.toLocaleString('tr-TR') : '—';
 
-    // Sağdaki özet panel
     document.getElementById('summaryShipmentId').textContent  = sh.shipment_id || '—';
     document.getElementById('summaryStatus').textContent      = sh.status || 'Pending';
     document.getElementById('summaryDestination').textContent = sh.destination || '—';
-    document.getElementById('summaryDistance').textContent    = fmtDistance(sh.distance_km);
+    document.getElementById('summaryDistance').textContent    = 
+        Number.isFinite(distanceKm) && distanceKm > 0 ? fmtDistance(distanceKm) : '—';
     document.getElementById('summaryEta').textContent         =
-        eta + (eta > 1 ? ' days' : ' day');
-    document.getElementById('summaryPrice').textContent       = fmtPrice(sh.price);
+        Number.isFinite(validEta) ? `${validEta} ${validEta > 1 ? 'days' : 'day'}` : '—';
+    document.getElementById('summaryPrice').textContent       = 
+        Number.isFinite(price) && price >= 0 ? fmtPrice(price) : '—';
 
-    // Status badge + timeline
     paintStatusUI(sh.status);
 
     errorEl.textContent = '';
@@ -67,7 +72,6 @@ function fillUI(sh) {
 function paintStatusUI(statusRaw) {
     const s = String(statusRaw || '').toLowerCase();
 
-    // Status badge rengi
     const badge = document.getElementById('resStatus');
     const cls =
         s.includes('deliver') ? 'delivered' :
@@ -77,13 +81,12 @@ function paintStatusUI(statusRaw) {
     badge.className = 'status-badge ' + cls;
     badge.textContent = statusRaw || 'Pending';
 
-    // Timeline adımları
     const order = ['created', 'ready', 'transit', 'delivered'];
     const norm =
         s.includes('deliver') ? 'delivered' :
         s.includes('transit') ? 'transit'   :
         s.includes('ready')   ? 'ready'     :
-        'created'; // pending -> created seviyesinde say
+        'created';
 
     const idx = order.indexOf(norm);
 
@@ -105,9 +108,8 @@ function paintStatusUI(statusRaw) {
 }
 
 function findShipment(id) {
-    const all = loadData(STORAGE_KEYS.SHIPMENTS, []);
-    // ÖNEMLİ: customer.js içinde "shipment_id" ile kaydediyoruz
-    return all.find(sh => String(sh.shipment_id) === String(id));
+  const all = loadData(STORAGE_KEYS.SHIPMENTS, []);
+  return all.find(sh => String(sh.shipment_id) === String(id));
 }
 
 function handleSearch(id) {
@@ -129,7 +131,6 @@ form.addEventListener('submit', (e) => {
     handleSearch(id);
 });
 
-// URL paramından otomatik ID çek (home.html -> ?trackID=...)
 const params = new URLSearchParams(location.search);
 const preId = params.get('trackID') || params.get('id') || params.get('shipment');
 
