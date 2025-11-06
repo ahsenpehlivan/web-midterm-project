@@ -1,0 +1,1643 @@
+/* =========================
+   GENEL AYARLAR
+   ========================= */
+:root {
+    --primary-blue: #1651c5;
+    --primary-dark: #111827;
+    --accent-orange: #ff6a21;
+    --text-muted: #4b5563;
+    --bg-light: #f3f4ff;
+    --white: #ffffff;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: var(--primary-dark);
+    background-color: var(--white);
+    line-height: 1.5;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* =========================
+   NAVBAR
+   ========================= */
+.navbar {
+    padding: 1.5rem 0;
+    background-color: #e5e7eb;
+}
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.logo-img {
+    width: 70px;
+    height: 70px;
+}
+.logo-text {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 1.1rem;
+    color: var(--primary-blue);
+}
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    /* transform: translateX(-120px); */
+}
+.nav-link {
+    text-decoration: none;
+    font-size: 1.2rem;
+    letter-spacing: 0.08em;
+    color: var(--primary-dark);
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+}
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-blue);
+}
+
+/* =========================
+   HERO
+   ========================= */
+.hero {
+    padding: 1.5rem 0 3.5rem;
+}
+.hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+.hero-text {
+    flex: 1 1 300px;
+    max-width: 420px;
+}
+.hero-title {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+.hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+/* ✅ TRACK FORM */
+.track-form {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.track-input {
+    flex: 1;
+    min-width: 220px;
+    padding: 0.85rem 1rem;
+    border-radius: 0.6rem;
+    border: 2px solid #d1d5db;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.track-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(22, 81, 197, 0.15);
+}
+
+.btn-primary {
+    padding: 0.9rem 1.8rem;
+    border-radius: 0.6rem;
+    background-color: var(--accent-orange);
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.btn-primary:hover {
+    background-color: #e45d18;
+    transform: translateY(-1px);
+}
+
+/* HERO IMAGE */
+.hero-image {
+    flex: 1 1 300px;
+    display: flex;
+    justify-content: center;
+}
+.hero-image-placeholder {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 4 / 3;
+    border-radius: 50%;
+    background: var(--bg-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-blue);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* =========================
+   FEATURES
+   ========================= */
+.features {
+    padding-bottom: 3rem;
+}
+.features-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+}
+.feature-card {
+    text-align: left;
+}
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 2px solid var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.75rem;
+}
+.feature-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+.feature-icon-img {
+    width: 50px;
+    height: 50px;
+}
+.feature-text {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+    .hero-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-image {
+        order: -1;
+    }
+
+    .track-form {
+        flex-direction: column;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .features-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .feature-icon {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* =========================
+   LOGIN PAGE
+   ========================= */
+
+.login-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    background-color: var(--bg-light);
+}
+
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    background-color: var(--white);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.login-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 0.6rem;
+    border: 2px solid #d1d5db;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(22, 81, 197, 0.15);
+    outline: none;
+}
+
+.login-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.login-footer {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.login-footer a {
+    color: var(--accent-orange);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   CREATE SHIPMENT PAGE
+   ========================= */
+
+.shipment-section {
+    background-color: var(--bg-light);
+    padding: 3rem 0;
+}
+
+.shipment-card {
+    background-color: var(--white);
+    border-radius: 1.2rem;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    padding: 2.5rem;
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+}
+
+.shipment-main {
+    flex: 1 1 0;
+}
+
+.shipment-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.shipment-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+}
+
+.shipment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* Form group zaten login sayfasında da kullanılıyor;
+   burada select ve textarea'yı da aynı tarz yapalım. */
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 0.6rem;
+    border: 2px solid #d1d5db;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    resize: vertical;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(22, 81, 197, 0.15);
+    outline: none;
+}
+
+/* Container size butonları */
+
+.option-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.option-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    border: 1.5px solid #d1d5db;
+    padding: 0.55rem 1.3rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    background-color: #f9fafb;
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+        color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.option-pill input {
+    display: none;
+}
+
+.option-pill input:checked + span {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(22, 81, 197, 0.25);
+    border-radius: 0.6rem;
+    padding: 0.55rem 1.3rem;
+}
+
+/* File upload */
+
+.file-input {
+    display: none;
+}
+
+.file-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-upload {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.file-name {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.upload-preview {
+    margin-top: 0.75rem;
+    border-radius: 0.8rem;
+    border: 1px dashed #d1d5db;
+    padding: 0.5rem;
+    max-width: 220px;
+}
+
+.upload-preview img {
+    width: 100%;
+    display: block;
+    border-radius: 0.6rem;
+}
+
+.upload-icon {
+    font-size: 1rem;
+}
+
+/* Buttons row */
+
+.shipment-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-secondary {
+    padding: 0.9rem 1.8rem;
+    border-radius: 0.6rem;
+    background-color: var(--white);
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border: 2px solid var(--primary-blue);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease,
+        transform 0.1s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #e0ebff;
+    transform: translateY(-1px);
+}
+
+.capacity-alert {
+    color: #b91c1c;
+    font-weight: 600;
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+}
+
+/* Summary panel */
+
+.shipment-summary {
+    flex: 0 0 260px;
+    border-radius: 0.9rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    background-color: #f9fafb;
+}
+
+.summary-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-label {
+    color: var(--text-muted);
+}
+
+.summary-value {
+    font-weight: 600;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .shipment-card {
+        flex-direction: column;
+    }
+
+    .shipment-summary {
+        width: 100%;
+    }
+
+    .shipment-actions {
+        flex-direction: column;
+    }
+
+    .shipment-actions .btn-primary,
+    .shipment-actions .btn-secondary {
+        width: 100%;
+    }
+}
+
+.shipment-created {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  background: #f0f9ff;
+  border: 1px solid #cce7ff;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.shipment-created h3 {
+  color: #0077cc;
+  margin-bottom: 0.5rem;
+}
+
+.shipment-id-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  border: 1px dashed #0077cc;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  margin: 0.5rem auto 0.5rem auto;
+}
+
+.shipment-id-text {
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: #004a80;
+  user-select: all;
+}
+
+.btn-copy {
+  background: #0077cc;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.btn-copy:hover {
+  background: #005fa3;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background: rgba(255, 193, 7, 0.12);
+    color: #f59e0b;
+}
+
+.status-badge.ready {
+    background: rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+}
+
+.status-badge.transit {
+    background: rgba(56, 189, 248, 0.12);
+    color: #0891b2;
+}
+
+.status-badge.delivered {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+/* Timeline */
+.timeline {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tl-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+    position: relative;
+}
+
+.tl-step .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 2px solid #d1d5db;
+    background: #f9fafb;
+}
+
+/* Aktif ve tamamlanmış adımlar */
+.tl-step.is-active .dot {
+    border-color: #2563eb;
+    background: #2563eb;
+}
+
+.tl-step.is-done .dot {
+    border-color: #10b981;
+    background: #10b981;
+}
+
+.tl-step.is-active,
+.tl-step.is-done {
+    color: #111827;
+}
+
+/* ===========================
+   ADMIN DASHBOARD STYLES
+   =========================== */
+
+/* Ana bölüm */
+.admin-section {
+    padding: 5rem 0 4rem;
+    background: #f9fafb;           /* beyaz/açık gri zemin */
+    min-height: 100vh;
+    color: #1f2937;                /* koyu gri metin */
+}
+
+.admin-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.admin-title {
+    font-size: clamp(2rem, 2.4vw, 2.6rem);
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: 0.02em;
+}
+
+.admin-subtitle {
+    font-size: 0.95rem;
+    max-width: 540px;
+    color: #4b5563;
+}
+
+/* Üstteki 4 büyük tab/card grid */
+.admin-tabs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.admin-tab-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.3rem 1.2rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease;
+    cursor: pointer;
+    color: inherit;
+}
+
+.admin-tab-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.09);
+    border-color: #bfdbfe;
+    background-color: #f9fafb;
+}
+
+.admin-tab-card.active {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+}
+
+.admin-tab-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 1.5rem;
+}
+
+.admin-tab-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.admin-tab-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+    letter-spacing: 0.02em;
+}
+
+.admin-tab-text {
+    font-size: 0.82rem;
+    color: #6b7280;
+}
+
+/* Alt taraftaki iki panel (stats + table) */
+.admin-content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.4fr);
+    gap: 1.75rem;
+}
+
+/* Panel genel */
+.admin-panel {
+    background: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem 1.4rem;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.admin-panel-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Quick Stats kartları */
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.admin-stat-card {
+    border-radius: 0.9rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 0.85rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.admin-stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: #6b7280;
+}
+
+.admin-stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Tablo alanı */
+.admin-table-wrapper {
+    width: 100%;
+    overflow: auto;
+    border-radius: 0.8rem;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 480px;
+    font-size: 0.85rem;
+}
+
+.admin-table thead {
+    background: #f3f4f6;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-table th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #374151;
+    font-weight: 600;
+}
+
+.admin-table td {
+    color: #1f2937;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #eff6ff;
+}
+
+.admin-table-empty {
+    text-align: center;
+    padding: 1.2rem 0.9rem;
+    color: #6b7280;
+    font-size: 0.83rem;
+}
+
+/* RESPONSIVE AYARLAR */
+@media (max-width: 992px) {
+    .admin-tabs-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-content-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-section {
+        padding-top: 4.5rem;
+    }
+
+    .admin-tabs-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .admin-tab-card {
+        padding: 1.1rem 1rem;
+    }
+
+    .admin-panel {
+        padding: 1.2rem 1rem;
+    }
+
+    .admin-table {
+        min-width: 100%;
+    }
+}
+
+/* ===========================
+   ADMIN - CONTAINER OPTIMIZATION
+   =========================== */
+
+.admin-section {
+    padding: 5rem 0 4rem;
+    background: #f9fafb;  /* login / diğer sayfalar gibi açık zemin */
+    min-height: 100vh;
+    color: #1f2937;
+}
+
+.admin-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.admin-title {
+    font-size: clamp(2rem, 2.4vw, 2.6rem);
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: 0.02em;
+}
+
+.admin-subtitle {
+    font-size: 0.95rem;
+    max-width: 640px;
+    color: #4b5563;
+}
+
+/* Üst sıra: sol taraf use case açıklama, sağ taraf stats + buton */
+.opt-top-row {
+    display: grid;
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+}
+
+/* Use case kartı */
+.opt-info-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem 1.4rem;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+.opt-info-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #111827;
+    margin-bottom: 0.9rem;
+}
+
+.opt-steps {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+.opt-steps li + li {
+    margin-top: 0.4rem;
+}
+
+/* Özet / buton kartı */
+.opt-summary-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.4rem 1.3rem 1.5rem;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.opt-summary-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #111827;
+}
+
+.opt-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.opt-summary-item {
+    border-radius: 0.75rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 0.65rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.opt-summary-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+}
+
+.opt-summary-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Optimize butonu */
+.opt-primary-btn {
+    margin-top: 0.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.35);
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        background 0.12s ease;
+}
+
+.opt-primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 26px rgba(37, 99, 235, 0.45);
+    background: linear-gradient(135deg, #1d4ed8, #1d4ed8);
+}
+
+.opt-primary-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
+}
+
+/* Reset Optimization secondary button */
+.opt-secondary-btn {
+    margin-top: 0.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    border: 2px solid #dc2626;
+    background: transparent;
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.opt-secondary-btn:hover {
+    background: #fee2e2;
+    transform: translateY(-1px);
+}
+
+.opt-secondary-btn:active {
+    transform: translateY(0);
+    background: #fecaca;
+}
+
+.opt-note {
+    font-size: 0.78rem;
+    color: #6b7280;
+}
+
+/* Alt grid: sol pending shipments, sağ containers */
+.opt-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.3fr);
+    gap: 1.75rem;
+}
+
+/* Panel genel */
+.admin-panel {
+    background: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem 1.4rem;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+.admin-panel-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Tablo alanı */
+.admin-table-wrapper {
+    width: 100%;
+    overflow: auto;
+    border-radius: 0.85rem;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+    font-size: 0.84rem;
+}
+
+.admin-table thead {
+    background: #f3f4f6;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.7rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-table th {
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #374151;
+    font-weight: 600;
+}
+
+.admin-table td {
+    color: #1f2937;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #eff6ff;
+}
+
+.admin-table-empty {
+    text-align: center;
+    padding: 1.2rem 0.9rem;
+    color: #6b7280;
+    font-size: 0.83rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .opt-top-row {
+        flex-direction: row;
+    }
+
+    .opt-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .admin-table {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-section {
+        padding-top: 4.5rem;
+    }
+
+    .opt-summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .admin-panel {
+        padding: 1.25rem 1rem;
+    }
+}
+
+.nav-links-admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    /*margin: 1rem auto;*/
+    flex-wrap: wrap;
+    transform: none; /* artık -120px gerek yok */
+}
+
+.nav-link-admin {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--primary-dark);
+    background-color: #f4f7fa;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: all 0.25s ease;
+    min-width: 140px;
+    text-align: center;
+}
+
+.nav-link-admin:hover {
+    background-color: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.nav-link-admin.active {
+    background-color: var(--primary-blue);
+    color: #fff;
+    border-color: var(--primary-blue);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* ===========================
+   INVENTORY DASHBOARD STYLES
+   =========================== */
+
+.inv-alert {
+    font-size: 0.82rem;
+    margin-top: 0.4rem;
+    color: #6b7280;
+}
+
+.inv-alert.has-alert {
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+/* Inventory durum badge'leri */
+.inv-badge {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.inv-badge.ok {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.inv-badge.low {
+    background: rgba(234, 179, 8, 0.18);
+    color: #b45309;
+}
+
+/* ===========================
+   INVENTORY DASHBOARD STYLES
+   =========================== */
+
+/* Inventory Levels panelini tek sütun yap (Summary kartıyla hizalı) */
+.opt-grid.opt-grid-single {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+/* Low-stock uyarı metni */
+.inv-alert {
+    font-size: 0.82rem;
+    margin-top: 0.4rem;
+    color: #6b7280;
+}
+
+.inv-alert.has-alert {
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+/* Inventory durum badge'leri */
+.inv-badge {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.inv-badge.ok {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.inv-badge.low {
+    background: rgba(234, 179, 8, 0.18);
+    color: #b45309;
+}
+
+/* Restock form alanı */
+.inv-actions {
+    margin-top: 1.3rem;
+    padding: 1rem 1rem 0.75rem;
+    border-radius: 0.9rem;
+    background: #f9fafb;
+    border: 1px dashed #d1d5db;
+}
+
+.inv-actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.inv-actions-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #111827;
+}
+
+.inv-actions-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) auto;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.inv-actions-row label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+}
+
+.inv-actions-row select,
+.inv-actions-row input[type="number"] {
+    margin-top: 0.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.82rem;
+}
+
+.inv-actions-note {
+    margin-top: 0.5rem;
+    font-size: 0.76rem;
+    color: #6b7280;
+}
+
+/* ===========================
+   FINANCIAL DASHBOARD STYLES
+   =========================== */
+
+.fin-positive {
+    color: #059669; /* yeşil */
+}
+
+.fin-negative {
+    color: #b91c1c; /* kırmızı */
+}
+
+.btn-reset {
+  background-color: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-reset:hover {
+  background-color: #dc2626;
+}
+
+/* ===========================
+   FINANCIAL DASHBOARD WIDTH FIX
+   =========================== */
+
+/* Üst grid yapısını tek sütuna indiriyoruz */
+#finDashboardRoot .admin-content-grid:first-of-type {
+    display: block; /* iki sütun değil, tek sütun */
+}
+
+/* Key Metrics paneli tam genişlikte olacak */
+#finDashboardRoot .admin-panel:first-of-type {
+    width: 100%;
+}
+
+
+/* Key metrics içindeki kartlar genişlesin */
+#finDashboardRoot .admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+/* Kutular daha düzgün hizalansın */
+#finDashboardRoot .admin-stat-card {
+    background-color: var(--bg-light, #f9fafb);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* ===========================
+   SYSTEM MAINTENANCE PANEL FIX
+   =========================== */
+
+/* Admin Dashboard’taki System Maintenance kutusunu daralt */
+.admin-panel.system-maintenance {
+  max-width: 60%;
+  margin: 0 auto; /* ortala */
+  margin-top: 50px;
+}
+
+/* Mobilde yine tam genişlik */
+@media (max-width: 768px) {
+  .admin-panel.system-maintenance {
+    max-width: 100%;
+  }
+}
+
+/* === Fleet Management === */
+
+.fleet-card {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1.3fr);
+    align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+    .fleet-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fleet-vehicles {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin-top: 1.5rem;
+}
+
+.fleet-vehicle {
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    background: #f9fafb;
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.03);
+}
+
+.fleet-subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.fleet-summary {
+    max-height: 100%;
+}
+
+.fleet-divider {
+    margin: 1rem 0;
+    border: none;
+    border-top: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.fleet-formula-hint {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.fleet-assignments-card {
+    margin-top: 2rem;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.fleet-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.fleet-table thead {
+    background: #f1f5f9;
+}
+
+.fleet-table th,
+.fleet-table td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.fleet-table th {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #475569;
+}
+
+/* ===========================
+   PRINT STYLES FOR FINANCIAL REPORT
+   =========================== */
+
+@media print {
+    /* Hide navbar and navigation */
+    .navbar,
+    .nav-links,
+    .nav-links-admin {
+        display: none !important;
+    }
+
+    /* Hide background colors and shadows */
+    body {
+        background-color: white !important;
+    }
+
+    .admin-section {
+        background-color: white !important;
+        padding: 0 !important;
+        min-height: auto !important;
+    }
+
+    /* Hide download button */
+    #btnDownloadReport {
+        display: none !important;
+    }
+
+    /* Ensure financial report container is visible and full width */
+    #financialReport {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Hide any buttons inside the report */
+    #financialReport .btn-primary,
+    #financialReport .btn-secondary {
+        display: none !important;
+    }
+
+    /* Ensure tables and panels are full width */
+    #financialReport .admin-panel {
+        width: 100% !important;
+        max-width: 100% !important;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #e5e7eb !important;
+    }
+
+    /* Ensure tables print nicely */
+    #financialReport .admin-table-wrapper {
+        overflow: visible !important;
+    }
+
+    #financialReport .admin-table {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    /* Ensure content grid is full width in print */
+    #financialReport .admin-content-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* Prevent page breaks inside key sections */
+    #financialReport .admin-header {
+        page-break-after: avoid;
+    }
+
+    #financialReport .admin-panel {
+        page-break-inside: avoid;
+    }
+
+    /* Ensure stats grid prints nicely */
+    #financialReport .admin-stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fleet Management | Transport System</title>
+
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo" class="logo-img" />
+                <span class="logo-text">TRANSPORT</span>
+            </div>
+
+            <!-- ADMIN NAV TABS -->
+            <nav class="nav-links-admin">
+                <a href="admin.html" class="nav-link-admin">Admin<br>Dashboard</a>
+                <a href="financial_dashboard.html" class="nav-link-admin">Financial<br>Dashboard</a>
+                <a href="fleet_management.html" class="nav-link-admin active">Fleet<br>Management</a>
+                <a href="inventory_dashboard.html" class="nav-link-admin">Inventory<br>Dashboard</a>
+            </nav>
+
+            <nav class="nav-links">
+                <a href="home.html" class="nav-link">HOME</a>
+                <a href="login.html" class="nav-link">LOGIN</a>
+            </nav>
+        </div>
+    </header>
+    <main class="shipment-section">
+        <div class="container">
+            <div class="shipment-card fleet-card">
+                <!-- SOL TARAF -->
+                <div class="shipment-main">
+                    <h1 class="shipment-title">Fleet Management</h1>
+                    <p class="shipment-desc">
+                        Assign trucks or ships to shipments and track trip expenses.
+                    </p>
+
+                    <!-- SHIPMENT SEÇİMİ -->
+                    <div class="form-group">
+                        <label for="fleetShipment">Select Shipment</label>
+                        <select id="fleetShipment" name="fleetShipment">
+                            <option value="">Select a shipment</option>
+                        </select>
+                    </div>
+                    <p id="noShipmentsMsg" class="capacity-alert" aria-live="polite"></p>
+
+                    <!-- MOD BİLGİSİ (DOMESTIC / INTERNATIONAL) -->
+                    <p id="fleetModeBadge" class="fleet-formula-hint"></p>
+
+                    <!-- ARAÇ BLOKLARI -->
+                    <section class="fleet-vehicles">
+                        <!-- TRUCK BLOĞU (SADECE YURTİÇİ İÇİN GÖRÜNECEK) -->
+                        <div class="fleet-vehicle" id="truckBlock">
+                            <h2 class="fleet-subtitle">Truck Assignment</h2>
+
+                            <div class="form-group">
+                                <label for="truckSelect">Truck</label>
+                                <select id="truckSelect">
+                                    <option value="">Select truck</option>
+                                </select>
+                            </div>
+
+                            <div class="summary-row">
+                                <span class="summary-label">Truck Expense</span>
+                                <span id="truckExpense" class="summary-value">—</span>
+                            </div>
+                        </div>
+
+                        <!-- SHIP BLOĞU (SADECE YURTDIŞI İÇİN GÖRÜNECEK) -->
+                        <div class="fleet-vehicle" id="shipBlock">
+                            <h2 class="fleet-subtitle">Ship Assignment</h2>
+
+                            <div class="form-group">
+                                <label for="shipSelect">Ship</label>
+                                <select id="shipSelect">
+                                    <option value="">Select ship</option>
+                                </select>
+                            </div>
+
+                            <div class="summary-row">
+                                <span class="summary-label">Ship Expense</span>
+                                <span id="shipExpense" class="summary-value">—</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- BUTONLAR -->
+                    <div class="shipment-actions">
+                        <button type="button" id="calcFleetBtn" class="btn-primary">
+                            Calculate Expense
+                        </button>
+                        <button type="button" id="saveFleetBtn" class="btn-secondary">
+                            Save Assignment
+                        </button>
+                    </div>
+
+                    <p id="fleetError" class="capacity-alert" aria-live="polite"></p>
+
+                    <p class="fleet-formula-hint">
+                        Trip Expense = (Fuel Cost/km × Distance) + Driver/Crew + Maintenance<br/>
+                        Distance is taken automatically from the route (Muğla → Destination).
+                    </p>
+                </div>
+
+                <!-- SAĞ TARAF: ÖZET -->
+                <aside class="shipment-summary fleet-summary">
+                    <h2 class="summary-title">Selected Shipment</h2>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Shipment ID</span>
+                        <span id="sumShipmentId" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Status</span>
+                        <span id="sumStatus" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Mode</span>
+                        <span id="sumMode" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Destination</span>
+                        <span id="sumDestination" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Product</span>
+                        <span id="sumProduct" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Container</span>
+                        <span id="sumContainer" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Weight</span>
+                        <span id="sumWeight" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Distance</span>
+                        <span id="sumDistance" class="summary-value">—</span>
+                    </div>
+                    <hr class="fleet-divider" />
+                    <div class="summary-row">
+                        <span class="summary-label">Truck Expense</span>
+                        <span id="sumTruckExpense" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Ship Expense</span>
+                        <span id="sumShipExpense" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Total Fleet Expense</span>
+                        <span id="sumTotalExpense" class="summary-value">—</span>
+                    </div>
+                </aside>
+            </div>
+        </div>
+            <section class="shipment-section">
+        <div class="container">
+            <div class="shipment-card fleet-assignments-card">
+                <h2 class="summary-title">Current Fleet Assignments</h2>
+                <p class="shipment-desc">
+                    See which trucks and ships are currently assigned to shipments.
+                </p>
+
+                <div class="table-wrapper">
+                    <table class="fleet-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Vehicle Name</th>
+                                <th>Shipment ID</th>
+                                <th>Destination</th>
+                                <th>Mode</th>
+                                <th>Vehicle Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fleetAssignmentsBody">
+                            <!-- JS ile doldurulacak -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <script type="module" src="./js/fleet_management.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[
+  { "city": "İstanbul", "country": "TR", "distance_km": 670 },
+  { "city": "Ankara",   "country": "TR", "distance_km": 570 },
+  { "city": "İzmir",    "country": "TR", "distance_km": 230 },
+  { "city": "Berlin",   "country": "DE", "distance_km": 2200 },
+  { "city": "Paris",    "country": "FR", "distance_km": 2500 }
+]

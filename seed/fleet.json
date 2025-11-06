@@ -1,0 +1,13 @@
+{
+  "ships": [
+    { "id": "S-1", "name": "BlueWave",   "fuel_per_km": 20, "crew_cost": 1500, "maintenance": 3000, "status": "Idle" },
+    { "id": "S-2", "name": "SeaRunner",  "fuel_per_km": 18, "crew_cost": 1500, "maintenance": 2800, "status": "Idle" },
+    { "id": "S-3", "name": "OceanStar",  "fuel_per_km": 22, "crew_cost": 1500, "maintenance": 3200, "status": "Idle" }
+  ],
+  "trucks": [
+    { "id": "T-1", "name": "CargoMax",   "fuel_per_km": 0.8, "driver_cost": 500, "maintenance": 600, "status": "Idle" },
+    { "id": "T-2", "name": "RoadKing",   "fuel_per_km": 0.9, "driver_cost": 500, "maintenance": 700, "status": "Idle" },
+    { "id": "T-3", "name": "CargoPro",   "fuel_per_km": 0.7, "driver_cost": 500, "maintenance": 2000, "status": "Idle" },
+    { "id": "T-4", "name": "HaulMaster", "fuel_per_km": 1.0, "driver_cost": 500, "maintenance": 900,  "status": "Idle" }
+  ]
+}

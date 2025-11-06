@@ -1,0 +1,5 @@
+[
+  { "type": "Small",  "capacity_kg": 2000,  "price_per_km": 5  },
+  { "type": "Medium", "capacity_kg": 5000,  "price_per_km": 8  },
+  { "type": "Large",  "capacity_kg": 10000, "price_per_km": 12 }
+]

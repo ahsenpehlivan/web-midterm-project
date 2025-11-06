@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Financial Dashboard | Transport System</title>
+
+    <!-- Ortak CSS -->
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo" class="logo-img" />
+                <span class="logo-text">TRANSPORT</span>
+            </div>
+
+            <!-- ADMIN NAV TABS -->
+            <nav class="nav-links-admin">
+                <a href="admin.html" class="nav-link-admin">Admin<br>Dashboard</a>
+                <a href="financial_dashboard.html" class="nav-link-admin active">Financial<br>Dashboard</a>
+                <a href="fleet_management.html" class="nav-link-admin">Fleet<br>Management</a>
+                <a href="inventory_dashboard.html" class="nav-link-admin">Inventory<br>Dashboard</a>
+            </nav>
+
+            <nav class="nav-links">
+                <a href="home.html" class="nav-link">HOME</a>
+                <a href="login.html" class="nav-link">LOGIN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN: FINANCIAL DASHBOARD -->
+    <main class="admin-section" id="finDashboardRoot">
+        <div class="container" id="financialReport">
+            <!-- ÜST BAŞLIK -->
+            <header class="admin-header">
+                <h1 class="admin-title">Financial Dashboard</h1>
+                <p class="admin-subtitle">
+                    See company-wide <strong>revenue</strong>, <strong>expenses</strong>,
+                    <strong>net income</strong>, <strong>tax</strong>, and
+                    <strong>profit after tax</strong> based on all shipments and containers.
+                </p>
+            </header>
+
+            <!-- ÜST GRID: KEY METRICS + AÇIKLAMA -->
+            <section class="admin-content-grid">
+                <!-- SOL: KEY METRICS -->
+                <div class="admin-panel">
+                    <h2 class="admin-panel-title">Key Metrics</h2>
+
+                    <div class="admin-stats-grid">
+                        <div class="admin-stat-card">
+                            <span class="admin-stat-label">Revenue</span>
+                            <span id="finRevenue" class="admin-stat-value">—</span>
+                        </div>
+
+                        <div class="admin-stat-card">
+                            <span class="admin-stat-label">Expenses</span>
+                            <span id="finExpenses" class="admin-stat-value">—</span>
+                        </div>
+
+                        <div class="admin-stat-card">
+                            <span class="admin-stat-label">Net Income</span>
+                            <span id="finNetIncome" class="admin-stat-value">—</span>
+                        </div>
+
+                        <div class="admin-stat-card">
+                            <span class="admin-stat-label">Tax</span>
+                            <span id="finTax" class="admin-stat-value">—</span>
+                        </div>
+
+                        <div class="admin-stat-card">
+                            <span class="admin-stat-label">Profit After Tax</span>
+                            <span id="finProfit" class="admin-stat-value">—</span>
+                        </div>
+
+                        <div class="admin-stat-card">
+                            <span class="admin-stat-label">Tax Rate</span>
+                            <span id="finTaxRate" class="admin-stat-value">—</span>
+                        </div>
+                    </div>
+
+                    <p id="finInfoNote" class="inv-alert">
+                        Metrics are calculated from all shipments and optimized containers.
+                    </p>
+                </div>
+            </section>
+
+            <!-- DOWNLOAD BUTTON -->
+            <div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                <button id="btnDownloadReport" class="btn-secondary">Download Financial Report (PDF)</button>
+            </div>
+
+            <!-- ALT GRID: REVENUE & EXPENSE TABLES -->
+            <section class="admin-content-grid" style="margin-top: 1.75rem;">
+                <!-- SOL: REVENUE TABLE -->
+                <div class="admin-panel">
+                    <h2 class="admin-panel-title">Revenue – Shipments</h2>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Shipment ID</th>
+                                    <th>Destination</th>
+                                    <th>Container</th>
+                                    <th>Weight (kg)</th>
+                                    <th>Revenue (₺)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finRevenueBody">
+                                <tr>
+                                    <td colspan="6" class="admin-table-empty">
+                                        No shipments created yet.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SAĞ: EXPENSE TABLE -->
+                <div class="admin-panel">
+                    <h2 class="admin-panel-title">Expenses – Containers</h2>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Container ID</th>
+                                    <th>Destination</th>
+                                    <th>Type</th>
+                                    <th>Used / Capacity (kg)</th>
+                                    <th>Transport Cost (₺)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finExpensesBody">
+                                <tr>
+                                    <td colspan="5" class="admin-table-empty">
+                                        No container expenses yet. Run "Optimize Containers" first.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- JS: admin tarafı -->
+    <script type="module" src="./js/admin.js"></script>
+</body>
+</html>

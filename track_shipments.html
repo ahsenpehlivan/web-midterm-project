@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Shipment | Transport System</title>
+
+    <!-- Ortak CSS -->
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo" class="logo-img" />
+                <span class="logo-text">TRANSPORT</span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="home.html" class="nav-link">HOME</a>
+                <a href="login.html" class="nav-link">LOGIN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- TRACK SHIPMENT SECTION (Create Shipment ile aynı tarz) -->
+    <main class="shipment-section">
+        <div class="container">
+            <div class="shipment-card">
+                <!-- SOL TARAF: FORM + DETAYLAR -->
+                <div class="shipment-main">
+                    <h1 class="shipment-title">Track Shipment</h1>
+                    <p class="shipment-desc">
+                        Enter your Shipment ID to see the current status and details.
+                    </p>
+
+                    <!-- ID SORGULAMA FORMU -->
+                    <form id="trackForm" class="shipment-form">
+                        <div class="form-group">
+                            <label for="trackId">Shipment ID</label>
+                            <input
+                                type="text"
+                                id="trackId"
+                                name="trackId"
+                                placeholder="e.g. TW-250305-AB3F"
+                                required
+                            />
+                        </div>
+
+                        <div class="shipment-actions">
+                            <button type="submit" class="btn-primary">
+                                Track
+                            </button>
+                            <a href="home.html" class="btn-secondary">
+                                Back to Home
+                            </a>
+                        </div>
+
+                        <!-- HATA MESAJI (kırmızı yazı için capacity-alert sınıfını kullandım) -->
+                        <p
+                            id="trackError"
+                            class="capacity-alert"
+                            aria-live="polite"
+                        ></p>
+                    </form>
+
+                    <!-- SONUÇ KARTI (Shipment Created kartı stilini yeniden kullanıyoruz) -->
+                <div id="trackResult" class="shipment-created" hidden>
+                    <h3>Shipment Details</h3>
+
+                    <p><strong>Shipment ID:</strong> <span id="resId"></span></p>
+
+                    <!-- STATUS BADGE -->
+                    <p>
+                        <strong>Status:</strong>
+                        <span id="resStatus" class="status-badge">Pending</span>
+                    </p>
+
+                    <p><strong>Destination:</strong> <span id="resDest"></span></p>
+                    <p><strong>Product:</strong> <span id="resProduct"></span></p>
+                    <p><strong>Container:</strong> <span id="resContainer"></span></p>
+                    <p><strong>Weight:</strong> <span id="resWeight"></span></p>
+                    <p><strong>Distance:</strong> <span id="resDistance"></span></p>
+                    <p><strong>ETA:</strong> <span id="resEta"></span></p>
+                    <p><strong>Price:</strong> <span id="resPrice"></span></p>
+                    <p><strong>Created at:</strong> <span id="resCreated"></span></p>
+
+                    <!-- TIMELINE -->
+                    <div class="timeline" aria-label="Shipment status timeline">
+                        <div class="tl-step">
+                            <span class="dot" id="st-created"></span>
+                            Created
+                        </div>
+                        <div class="tl-step">
+                            <span class="dot" id="st-ready"></span>
+                            Ready for Transport
+                        </div>
+                        <div class="tl-step">
+                            <span class="dot" id="st-transit"></span>
+                            In Transit
+                        </div>
+                        <div class="tl-step">
+                            <span class="dot" id="st-delivered"></span>
+                            Delivered
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+
+                <!-- SAĞ TARAF: ÖZET PANEL (Create Shipment summary ile aynı stil) -->
+                <aside class="shipment-summary">
+                    <h2 class="summary-title">Overview</h2>
+
+                    <div class="summary-row">
+                        <span class="summary-label">ID</span>
+                        <span id="summaryShipmentId" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Status</span>
+                        <span id="summaryStatus" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Destination</span>
+                        <span id="summaryDestination" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Distance</span>
+                        <span id="summaryDistance" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">ETA</span>
+                        <span id="summaryEta" class="summary-value">—</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Price</span>
+                        <span id="summaryPrice" class="summary-value">—</span>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="./js/track_shipments.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "revenue": 0,
+  "expenses": 0,
+  "net_income": 0,
+  "tax_rate": 0.2,
+  "tax": 0,
+  "profit_after_tax": 0
+}

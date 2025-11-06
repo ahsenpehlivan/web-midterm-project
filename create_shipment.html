@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Shipment | Transport System</title>
+
+    <!-- Ortak CSS -->
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <!-- Kendi logon -->
+                <img src="assets/logo.png" alt="Logo" class="logo-img" />
+                <span class="logo-text">TRANSPORT</span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="home.html" class="nav-link">HOME</a>
+                <a href="login.html" class="nav-link">LOGIN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CREATE SHIPMENT -->
+    <main class="shipment-section">
+        <div class="container">
+            <div class="shipment-card">
+                <!-- SOL: FORM -->
+                <div class="shipment-main">
+                    <h1 class="shipment-title">Create Shipment</h1>
+                    <p class="shipment-desc">
+                        Enter product and destination details to create a shipment request.
+                    </p>
+
+                    <form class="shipment-form" action="#" method="POST">
+                        <!-- Origin -->
+                        <div class="form-group">
+                            <label for="origin">Origin</label>
+                            <input
+                                type="text"
+                                id="origin"
+                                name="origin"
+                                value="Muğla"
+                                readonly
+                            />
+                        </div>
+
+                        <!-- Destination -->
+                        <div class="form-group">
+                            <label for="destination">Destination</label>
+                            <input
+                                type="text"
+                                id="destination"
+                                name="destination"
+                                placeholder="Enter city and country"
+                                autocomplete="off"
+                                required
+                            />
+
+                            <!-- Öneriler için (JS ile dolduracaksın) -->
+                            <div
+                                id="destSuggestions"
+                                class="combo-suggestions"
+                                role="listbox"
+                                aria-label="Destination suggestions"
+                                hidden
+                            ></div>
+                        </div>
+
+                        <!-- Product Name -->
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input
+                                type="text"
+                                id="productName"
+                                name="productName"
+                                placeholder="e.g. Blueberries"
+                                required
+                            />
+                        </div>
+
+                        <!-- Product Category -->
+                        <div class="form-group">
+                            <label for="productCategory">Product Category</label>
+                            <select
+                                id="productCategory"
+                                name="productCategory"
+                                required
+                            >
+                                <option value="" disabled selected>
+                                    Select category
+                                </option>
+                                <option value="fresh">Fresh Blueberries</option>
+                                <option value="frozen">Frozen Blueberries</option>
+                                <option value="organic">Organic Blueberries</option>
+                            </select>
+                        </div>
+
+                        <!-- Weight -->
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input
+                                type="number"
+                                id="weight"
+                                name="weight"
+                                min="1"
+                                value="500"
+                                placeholder="e.g. 500"
+                                required
+                            />
+                        </div>
+
+                        <!-- Container Size (Small / Medium / Large) -->
+                        <div class="form-group">
+                            <label>Container Size</label>
+                            <div class="option-group">
+                                <label class="option-pill">
+                                    <input
+                                        type="radio"
+                                        name="containerSize"
+                                        value="small"
+                                        checked
+                                    />
+                                    <span>Small</span>
+                                </label>
+                                <label class="option-pill">
+                                    <input
+                                        type="radio"
+                                        name="containerSize"
+                                        value="medium"
+                                    />
+                                    <span>Medium</span>
+                                </label>
+                                <label class="option-pill">
+                                    <input
+                                        type="radio"
+                                        name="containerSize"
+                                        value="large"
+                                    />
+                                    <span>Large</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Photo Upload -->
+                        <div class="form-group">
+                            <label for="shipmentPhoto">Photo (optional)</label>
+
+                            <input
+                                class="file-input"
+                                type="file"
+                                id="shipmentPhoto"
+                                name="shipmentPhoto"
+                                accept="image/*"
+                            />
+
+                            <div class="file-row">
+                                <label
+                                    for="shipmentPhoto"
+                                    class="btn-upload"
+                                    role="button"
+                                >
+                                    <span class="upload-icon" aria-hidden="true">📷</span>
+                                    Choose Image
+                                </label>
+                                <span
+                                    id="fileName"
+                                    class="file-name"
+                                    aria-live="polite"
+                                >
+                                    No file selected
+                                </span>
+                            </div>
+
+                            <div id="uploadPreview" class="upload-preview" hidden>
+                                <img id="uploadImg" alt="Uploaded preview" />
+                            </div>
+
+                            <small>
+                                You can upload JPG/PNG. Try to keep it under 2–3 MB.
+                            </small>
+                        </div>
+
+                        <!-- Details -->
+                        <div class="form-group">
+                            <label for="shipmentDetails">Details</label>
+                            <textarea
+                                id="shipmentDetails"
+                                name="shipmentDetails"
+                                rows="4"
+                                placeholder="Additional information about the shipment (optional)"
+                            ></textarea>
+                        </div>
+
+                        <!-- Buttons + Capacity Alert -->
+                        <div class="shipment-actions">
+                            <button
+                                type="button"
+                                id="calculatePriceBtn"
+                                class="btn-primary"
+                            >
+                                Calculate Price
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn-secondary"
+                            >
+                                Submit
+                            </button>
+                        </div>
+
+                        <p
+                            id="capacityAlert"
+                            class="capacity-alert"
+                            aria-live="polite"
+                        ></p>
+
+            <!-- SUMMARY -->
+            <section class="shipment-summary">
+            <h2 class="summary-title">Summary</h2>
+            <div class="summary-row">
+                <span class="summary-label">Shipment ID:</span>
+                <span id="summaryShipmentId" class="summary-value">—</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Distance:</span>
+                <span id="summaryDistance" class="summary-value">—</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">ETA:</span>
+                <span id="summaryEta" class="summary-value">—</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Price:</span>
+                <span id="summaryPrice" class="summary-value">—</span>
+            </div>
+            </section>
+
+            <!-- ✅ Shipment Created Info -->
+            <div id="shipmentCreatedCard" class="shipment-created" hidden>
+            <h3>Shipment Created Successfully 🎉</h3>
+            <p>Your Shipment ID:</p>
+            <div class="shipment-id-box">
+                <span id="createdShipmentId" class="shipment-id-text"></span>
+                <button id="copyShipmentIdBtn" type="button" class="btn-copy">Copy</button>
+            </div>
+            <p class="shipment-hint">Use this ID to <strong>track</strong> your shipment later.</p>
+            </div>
+
+            </div>
+        </div>
+    </main>
+    <script type="module" src="./js/customer.js"></script>
+</body>
+</html>

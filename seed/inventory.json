@@ -1,0 +1,5 @@
+[
+  { "category": "Fresh",  "quantity_kg": 4500, "min_stock": 2000 },
+  { "category": "Frozen", "quantity_kg": 1200, "min_stock": 1000 },
+  { "category": "Organic","quantity_kg": 8000, "min_stock": 2500 }
+]

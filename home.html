@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transport System - Home</title>
+
+    <!-- Harici CSS -->
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- HEADER / NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <!-- LOGO ALANI -->
+            <div class="logo">
+                <img src="assets/logo.png" alt="Transport Logo" class="logo-img" />
+
+                <span class="logo-text">TRANSPORT</span>
+            </div>
+
+            <!-- MENU -->
+            <nav class="nav-links">
+                <a href="home.html" class="nav-link active">HOME</a>
+                <a href="login.html" class="nav-link">LOGIN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="container hero-container">
+                <!-- SOL TARAF: METİN -->
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Reliable <br />
+                        Cargo
+                    </h1>
+                    <p class="hero-subtitle">
+                        We provide worldwide freight services.
+                    </p>
+
+                    <form class="track-form" action="track_shipments.html" method="GET">
+                        <input
+                            type="text"
+                            name="trackID"
+                            placeholder="Enter your Tracking ID"
+                            class="track-input"
+                            required
+                        />
+                        <button type="submit" class="btn-primary">
+                            Track Shipment
+                        </button>
+                    </form>
+
+                </div>
+
+                <!-- SAĞ TARAF: GÖRSEL (SEN EKLEYECEKSİN) -->
+                <div class="hero-image">
+                    <!-- Buraya ana illüstrasyon görselini ekle -->
+                    <img src="assets/hero.png" alt="Plane, ship and truck" />
+                </div>
+            </div>
+        </section>
+
+        <!-- ÖZELLİKLER / ICONLU KISIM -->
+        <section class="features">
+            <div class="container features-container">
+                <!-- 1. Kart -->
+                <article class="feature-card">
+                    <img src="assets/location.png" alt="" class="feature-icon-img" />
+
+                    <h3 class="feature-title">Fast and Efficient</h3>
+                    <p class="feature-text">
+                        We ensure timely delivery of your cargo.
+                    </p>
+                </article>
+
+                <!-- 2. Kart -->
+                <article class="feature-card">
+                    <img src="assets/earth.png" alt="" class="feature-icon-img" />
+                    <h3 class="feature-title">Worldwide Shipping</h3>
+                    <p class="feature-text">
+                        We deliver goods across the globe.
+                    </p>
+                </article>
+
+                <!-- 3. Kart -->
+                <article class="feature-card">
+                    <img src="assets/track.png" alt="" class="feature-icon-img" />
+                    <h3 class="feature-title">Cargo Tracking</h3>
+                    <p class="feature-text">
+                        Track your shipment status online.
+                    </p>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

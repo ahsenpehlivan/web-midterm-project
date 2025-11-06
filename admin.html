@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Container Optimization | Transport System</title>
+
+    <!-- Ortak CSS -->
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo" class="logo-img" />
+                <span class="logo-text">TRANSPORT</span>
+            </div>
+
+            <!-- ADMIN NAV TABS -->
+            <nav class="nav-links-admin">
+                <a href="admin.html" class="nav-link-admin active">Admin<br>Dashboard</a>
+                <a href="financial_dashboard.html" class="nav-link-admin">Financial<br>Dashboard</a>
+                <a href="fleet_management.html" class="nav-link-admin">Fleet<br>Management</a>
+                <a href="inventory_dashboard.html" class="nav-link-admin">Inventory<br>Dashboard</a>
+            </nav>
+            <nav class="nav-links">
+                <a href="home.html" class="nav-link active">HOME</a>
+                <a href="login.html" class="nav-link">LOGIN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN: CONTAINER OPTIMIZATION -->
+    <main class="admin-section">
+        <div class="container">
+            <!-- ÜST BAŞLIK -->
+            <header class="admin-header">
+                <h1 class="admin-title">Container Optimization</h1>
+                <p class="admin-subtitle">
+                    Group multiple shipments with the same destination and container type into a single container
+                    using the First-Fit Decreasing (FFD) algorithm.
+                </p>
+            </header>
+
+            <!-- ÜST INFO & BUTON -->
+            <section class="opt-top-row">
+                <div class="opt-summary-card">
+                    <h3 class="opt-summary-title">Current Summary</h3>
+                    <div class="opt-summary-grid">
+                        <div class="opt-summary-item">
+                            <span class="opt-summary-label">Pending Shipments</span>
+                            <span class="opt-summary-value" id="statPendingShipments">—</span>
+                        </div>
+                        <div class="opt-summary-item">
+                            <span class="opt-summary-label">Optimized Containers</span>
+                            <span class="opt-summary-value" id="statContainers">—</span>
+                        </div>
+                        <div class="opt-summary-item">
+                            <span class="opt-summary-label">Total Weight (kg)</span>
+                            <span class="opt-summary-value" id="statTotalWeight">—</span>
+                        </div>
+                        <div class="opt-summary-item">
+                            <span class="opt-summary-label">Total Transport Cost</span>
+                            <span class="opt-summary-value" id="statTotalCost">—</span>
+                        </div>
+                    </div>
+
+                    <button id="btnOptimize" class="opt-primary-btn">
+                        Optimize Containers
+                    </button>
+
+                    <button id="btnReset" class="opt-secondary-btn">
+                        Reset Optimization
+                    </button>
+
+                    <p class="opt-note">
+                        Only shipments with the same <strong>Destination</strong> and
+                        <strong>Container Type</strong> are grouped into a single container.
+                    </p>
+                </div>
+            </section>
+
+            <!-- ALT GRID: SOL PENDING SHIPMENTS, SAĞ SONUÇLAR -->
+            <section class="opt-grid">
+                <!-- SOL: Pending Shipments -->
+                <div class="admin-panel">
+                    <h2 class="admin-panel-title">Pending Shipments</h2>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Destination</th>
+                                    <th>Container</th>
+                                    <th>Weight (kg)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingShipmentsBody">
+                                <tr>
+                                    <td colspan="5" class="admin-table-empty">
+                                        No pending shipments found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SAĞ: Optimization Result (Containers) -->
+                <div class="admin-panel">
+                    <h2 class="admin-panel-title">Optimized Containers</h2>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Container ID</th>
+                                    <th>Destination</th>
+                                    <th>Type</th>
+                                    <th>Used / Capacity (kg)</th>
+                                    <th>Remaining (kg)</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="containersBody">
+                                <tr>
+                                    <td colspan="6" class="admin-table-empty">
+                                        No containers yet. Click “Optimize Containers”.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="admin-panel system-maintenance">
+        <h2 class="admin-panel-title">System Maintenance</h2>
+        <p class="admin-subtitle">
+            Reset all data (shipments, containers, inventory, and financials) to their initial default values.
+        </p>
+
+        <!-- onclick KALDIRILDI, id eklendi -->
+        <button id="btnSystemReset" class="btn-reset">🔄 Reset System Data</button>
+
+        <p class="inv-alert" style="margin-top: 0.75rem;">
+            Use this option if you want to restart the project demo from its initial state.
+        </p>
+        </div>
+
+
+    </main>
+
+    <!-- JS: admin tarafı -->
+    <script type="module" src="./js/admin.js"></script>
+</body>
+</html>
