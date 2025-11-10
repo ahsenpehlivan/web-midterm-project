@@ -25,21 +25,17 @@ function fmtKm(n) {
 
 function calcTruckExpense(truck, distanceKm) {
   if (!truck || !distanceKm || distanceKm <= 0) return 0;
-
   const fuelPerKm = Number(truck.fuel_per_km ?? 0);
   const driver    = Number(truck.driver_cost ?? 0);
   const maint     = Number(truck.maintenance ?? 0);
-
   return fuelPerKm * distanceKm + driver + maint;
 }
 
 function calcShipExpense(ship, distanceKm) {
   if (!ship || !distanceKm || distanceKm <= 0) return 0;
-
   const fuelPerKm = Number(ship.fuel_per_km ?? 0);
   const crew      = Number(ship.crew_cost ?? 0);
   const maint     = Number(ship.maintenance ?? 0);
-
   return fuelPerKm * distanceKm + crew + maint;
 }
 
@@ -102,13 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
       shipmentSelect.innerHTML =
         '<option value="">Select a shipment</option>';
 
-      const pendingShipments = (shipmentsAll || []).filter(
-        sh => (sh.status || 'Pending') === 'Pending'
-      );
+      // ✅ Artık hem "Pending" hem "Ready for Transport" olanlar listeleniyor
+      const availableShipments = (shipmentsAll || []).filter(sh => {
+        const st = String(sh.status || '').toLowerCase();
+        return st === 'pending' || st === 'ready for transport';
+      });
 
-      if (!pendingShipments.length) {
+      if (!availableShipments.length) {
         noShipmentsMsg.textContent =
-          'There is no pending shipment to assign fleet.';
+          'There is no shipment available to assign fleet.';
         shipmentSelect.disabled = true;
         calcBtn.disabled = true;
         saveBtn.disabled = true;
@@ -124,16 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
       truckSelect.disabled = false;
       shipSelect.disabled = false;
 
-      pendingShipments
-        .filter(sh => (sh.status || 'Pending') === 'Pending')
-        .forEach((sh) => {
-          const opt = document.createElement('option');
-          opt.value = sh.shipment_id;
-          const status = sh.status || 'Pending';
-          opt.textContent =
-            `${sh.shipment_id} — ${sh.destination || ''} (${sh.weight_kg || 0} kg, ${sh.container_type || ''}, ${status})`;
-          shipmentSelect.appendChild(opt);
-        });
+      availableShipments.forEach((sh) => {
+        const opt = document.createElement('option');
+        opt.value = sh.shipment_id;
+        const status = sh.status || 'Pending';
+        opt.textContent =
+          `${sh.shipment_id} — ${sh.destination || ''} (${sh.weight_kg || 0} kg, ${sh.container_type || ''}, ${status})`;
+        shipmentSelect.appendChild(opt);
+      });
     }
 
     function fillFleetOptions() {
@@ -221,23 +217,15 @@ document.addEventListener('DOMContentLoaded', () => {
       sumWeight.textContent      = fmtKg(currentShip.weight_kg);
       sumDistance.textContent    = fmtKm(currentShip.distance_km);
 
-      if (currentShip.truck_expense != null) {
-        sumTruckExp.textContent = fmtCurrency(currentShip.truck_expense);
-      } else {
-        sumTruckExp.textContent = '—';
-      }
-
-      if (currentShip.ship_expense != null) {
-        sumShipExp.textContent = fmtCurrency(currentShip.ship_expense);
-      } else {
-        sumShipExp.textContent = '—';
-      }
-
-      if (currentShip.fleet_total_expense != null) {
-        sumTotalExp.textContent = fmtCurrency(currentShip.fleet_total_expense);
-      } else {
-        sumTotalExp.textContent = '—';
-      }
+      sumTruckExp.textContent = currentShip.truck_expense != null
+        ? fmtCurrency(currentShip.truck_expense)
+        : '—';
+      sumShipExp.textContent = currentShip.ship_expense != null
+        ? fmtCurrency(currentShip.ship_expense)
+        : '—';
+      sumTotalExp.textContent = currentShip.fleet_total_expense != null
+        ? fmtCurrency(currentShip.fleet_total_expense)
+        : '—';
     }
 
     function onShipmentChange() {
@@ -253,10 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       currentShip = shipmentsAll.find(sh => String(sh.shipment_id) === String(id));
-
       truckExpenseEl.textContent = '—';
       shipExpenseEl.textContent  = '—';
-
       updateModeUI();
       updateSummary();
       showError('');
@@ -270,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const domestic   = isDomesticShipment(currentShip);
       const distanceKm = Number(currentShip.distance_km || 0);
-
       if (distanceKm <= 0) {
         showError('Distance is not defined for this shipment.');
         return;
@@ -302,17 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const total = truckExp + shipExp;
-
       sumTruckExp.textContent = truckExp ? fmtCurrency(truckExp) : '—';
       sumShipExp.textContent  = shipExp ? fmtCurrency(shipExp) : '—';
       sumTotalExp.textContent = fmtCurrency(total);
-
       showError('');
     }
 
     function refreshAssignmentsTable() {
       if (!assignmentsBody) return;
-
       assignmentsBody.innerHTML = '';
 
       const trucks = fleetData.trucks || [];
@@ -355,31 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
           vehicleStatus = s?.status || '—';
         }
 
-        const tdVehicleType = document.createElement('td');
-        tdVehicleType.textContent = vehicleType;
-
-        const tdVehicleName = document.createElement('td');
-        tdVehicleName.textContent = vehicleName;
-
-        const tdShipmentId = document.createElement('td');
-        tdShipmentId.textContent = sh.shipment_id || '—';
-
-        const tdDestination = document.createElement('td');
-        tdDestination.textContent = sh.destination || '—';
-
-        const tdMode = document.createElement('td');
-        tdMode.textContent = modeText;
-
-        const tdVehStatus = document.createElement('td');
-        tdVehStatus.textContent = vehicleStatus || '—';
-
-        tr.appendChild(tdVehicleType);
-        tr.appendChild(tdVehicleName);
-        tr.appendChild(tdShipmentId);
-        tr.appendChild(tdDestination);
-        tr.appendChild(tdMode);
-        tr.appendChild(tdVehStatus);
-
+        tr.innerHTML = `
+          <td>${vehicleType}</td>
+          <td>${vehicleName}</td>
+          <td>${sh.shipment_id || '—'}</td>
+          <td>${sh.destination || '—'}</td>
+          <td>${modeText}</td>
+          <td>${vehicleStatus || '—'}</td>
+        `;
         assignmentsBody.appendChild(tr);
       });
     }
@@ -392,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const domestic   = isDomesticShipment(currentShip);
       const distanceKm = Number(currentShip.distance_km || 0);
-
       if (distanceKm <= 0) {
         showError('Distance is not defined for this shipment.');
         return;
@@ -409,7 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const prev     = allShipments[idx];
       const oldFleet = Number(prev.fleet_total_expense || 0);
-
       const fleetRaw = loadData(STORAGE_KEYS.FLEET, { ships: [], trucks: [] });
       let truckExp = 0;
       let shipExp  = 0;
@@ -430,7 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const truck = trucksArr[tIdx];
-
         if ((truck.status || 'Idle') !== 'Idle') {
           showError('This vehicle is already in transport.');
           return;
@@ -442,7 +404,6 @@ document.addEventListener('DOMContentLoaded', () => {
         prev.truck_id      = truckId;
         prev.truck_name    = truck?.name || '';
         prev.truck_expense = truckExp;
-
         prev.ship_id       = null;
         prev.ship_name     = '';
         prev.ship_expense  = 0;
@@ -465,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const ship = shipsArr[sIdx];
-
         if ((ship.status || 'Idle') !== 'Idle') {
           showError('This vehicle is already in transport.');
           return;
@@ -477,7 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         prev.ship_id       = shipId;
         prev.ship_name     = ship?.name || '';
         prev.ship_expense  = shipExp;
-
         prev.truck_id      = null;
         prev.truck_name    = '';
         prev.truck_expense = 0;
@@ -502,7 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tax: 0,
         profit_after_tax: 0
       });
-
       fin.expenses = (fin.expenses || 0) - oldFleet + total;
       saveData(STORAGE_KEYS.FINANCIALS, fin);
       recomputeFinancials();
@@ -514,7 +472,6 @@ document.addEventListener('DOMContentLoaded', () => {
       fillShipmentOptions();
       fillFleetOptions();
       refreshAssignmentsTable();
-
       shipmentSelect.value = '';
       currentShip = null;
 
@@ -522,11 +479,11 @@ document.addEventListener('DOMContentLoaded', () => {
       updateSummary();
       truckExpenseEl.textContent = '—';
       shipExpenseEl.textContent  = '—';
-
       showError('');
       alert('Fleet assigned and vehicle status updated successfully.');
     }
 
+    // === INITIALIZATION ===
     fillShipmentOptions();
     fillFleetOptions();
     refreshAssignmentsTable();
@@ -534,13 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSummary();
 
     shipmentSelect.addEventListener('change', onShipmentChange);
-    calcBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      handleCalculate();
-    });
-    saveBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      handleSave();
-    });
+    calcBtn.addEventListener('click', e => { e.preventDefault(); handleCalculate(); });
+    saveBtn.addEventListener('click', e => { e.preventDefault(); handleSave(); });
   })();
 });
