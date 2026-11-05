@@ -1,121 +1,30 @@
-# web-midterm-project
+# Transport Management Web Demo
 
+![JavaScript](https://img.shields.io/badge/JavaScript-Browser%20App-F7DF1E?logo=javascript&logoColor=black) ![HTML](https://img.shields.io/badge/HTML%20%26%20CSS-Frontend-E34F26?logo=html5&logoColor=white)
 
-(async () => {
-  // === Proje localStorage anahtarları ===
-  const STORAGE_KEYS = {
-    META: 'APP_META',
-    ROUTES: 'ROUTE_DISTANCES',
-    RATES: 'CONTAINER_RATES',
-    FLEET: 'FLEET_DATA',
-    INVENTORY: 'INVENTORY_DATA',
-    FINANCIALS: 'FINANCIALS',
-    SHIPMENTS: 'SHIPMENTS',
-    CONTAINERS: 'CONTAINERS'
-  };
+A browser-based logistics coursework project with customer and administrator views. It models shipment creation and tracking alongside fleet, container, inventory, and financial dashboards.
 
-  // === Yardımcı fonksiyonlar ===
-  const loadData = (key, fb=[]) => JSON.parse(localStorage.getItem(key) || JSON.stringify(fb));
-  const saveData = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+## What you can explore
 
-  // === JSON seedleri yükle (gerekirse) ===
-  async function bootstrapSeedIfNeeded() {
-    const already = localStorage.getItem(STORAGE_KEYS.META);
-    if (already) return;
-    const [meta, routes, rates, fleet, inventory, fin] = await Promise.all([
-      fetch('./seed/app_meta.json').then(r=>r.json()),
-      fetch('./seed/routes.json').then(r=>r.json()),
-      fetch('./seed/container_rates.json').then(r=>r.json()),
-      fetch('./seed/fleet.json').then(r=>r.json()),
-      fetch('./seed/inventory.json').then(r=>r.json()),
-      fetch('./seed/financial_schema.json').then(r=>r.json())
-    ]);
-    localStorage.setItem(STORAGE_KEYS.META, JSON.stringify(meta));
-    localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
-    localStorage.setItem(STORAGE_KEYS.RATES, JSON.stringify(rates));
-    localStorage.setItem(STORAGE_KEYS.FLEET, JSON.stringify(fleet));
-    localStorage.setItem(STORAGE_KEYS.INVENTORY, JSON.stringify(inventory));
-    localStorage.setItem(STORAGE_KEYS.FINANCIALS, JSON.stringify(fin));
-    localStorage.setItem(STORAGE_KEYS.SHIPMENTS, JSON.stringify([]));
-    localStorage.setItem(STORAGE_KEYS.CONTAINERS, JSON.stringify([]));
-  }
+| Area | Pages |
+| --- | --- |
+| Customer flow | [Home](home.html), [create shipment](create_shipment.html), [track shipments](track_shipments.html) |
+| Administration | [Admin](admin.html), [fleet](fleet_management.html), [inventory](inventory_dashboard.html), [financial dashboard](financial_dashboard.html) |
 
-  await bootstrapSeedIfNeeded();
+The JavaScript modules use `localStorage` for demo state and load initial JSON from [`seed/`](seed/). This is a **client-side prototype**; the data and login flow are not a production backend.
 
-  // === Mesafe & fiyat bulma ===
-  function findDistanceKmFromRoutes(input) {
-    const routes = loadData(STORAGE_KEYS.ROUTES, []);
-    const keyCity = input.split(',')[0].trim().toLowerCase();
-    const match = routes.find(r => r.city.toLowerCase() === keyCity);
-    return match ? match.distance_km : 1000;
-  }
+## Run locally
 
-  function getRatePerKm(containerType) {
-    const rates = loadData(STORAGE_KEYS.RATES, []);
-    const match = rates.find(r => r.type.toLowerCase() === containerType.toLowerCase());
-    return match ? match.price_per_km : 5;
-  }
+From the repository root:
 
-  // === Dummy shipment oluştur ===
-  const destinations = ["İstanbul, TR", "Ankara, TR", "İzmir, TR", "Berlin, DE", "Paris, FR"];
-  const categories = ["Fresh", "Frozen", "Organic"];
-  const containerTypes = ["Small", "Medium", "Large"];
+```bash
+python -m http.server 8000
+```
 
-  const inventory = loadData(STORAGE_KEYS.INVENTORY, []);
-  const shipments = loadData(STORAGE_KEYS.SHIPMENTS, []);
-  const fin = loadData(STORAGE_KEYS.FINANCIALS, { revenue: 0, expenses: 0, tax_rate: 0.2 });
+Then open [http://localhost:8000/home.html](http://localhost:8000/home.html). Use a local HTTP server so the JSON seed files load correctly.
 
-  const created = [];
+## Stack
 
-  for (let i = 0; i < 5; i++) {
-    const dest = destinations[Math.floor(Math.random() * destinations.length)];
-    const cat = categories[Math.floor(Math.random() * categories.length)];
-    const cont = containerTypes[Math.floor(Math.random() * containerTypes.length)];
-    const dist = findDistanceKmFromRoutes(dest);
-    const rate = getRatePerKm(cont);
-    const weight = Math.floor(Math.random() * 1000) + 200;
-    const price = dist * rate;
-    const eta = Math.ceil(dist / 800);
-    const id = `TW-${Date.now().toString().slice(-6)}-${i}`;
+HTML, CSS, and vanilla JavaScript. No build step is required.
 
-    const newShipment = {
-      shipment_id: id,
-      destination: dest,
-      product_name: `${cat} Blueberries`,
-      product_category: `${cat} Blueberries`,
-      container_type: cont,
-      weight_kg: weight,
-      distance_km: dist,
-      rate_per_km: rate,
-      price,
-      eta_days: eta,
-      status: "Pending",
-      created_at: new Date().toISOString()
-    };
-    shipments.push(newShipment);
-    created.push(newShipment);
-
-    // Envanterden düş
-    const inv = inventory.find(x => x.category === cat);
-    if (inv) {
-      inv.quantity_kg = Math.max(0, inv.quantity_kg - weight);
-      inv.status = inv.quantity_kg < inv.min_stock ? "Low" : "OK";
-    }
-
-    fin.revenue += price;
-  }
-
-  saveData(STORAGE_KEYS.SHIPMENTS, shipments);
-  saveData(STORAGE_KEYS.INVENTORY, inventory);
-  saveData(STORAGE_KEYS.FINANCIALS, fin);
-
-  console.table(created.map(s => ({
-    ID: s.shipment_id,
-    Destination: s.destination,
-    Container: s.container_type,
-    Weight: s.weight_kg,
-    Price: s.price
-  })));
-
-  alert(`✅ ${created.length} dummy shipments created. Sayfayı yenileyip admin panelde görebilirsin.`);
-})();
+> Built as a web development midterm project.
